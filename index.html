@@ -1,0 +1,729 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Рассвет цивилизации</title>
+<style>
+:root{--p:rgba(9,22,38,.88);--t:#eaf2ff;--a:#ffd166;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0;overflow:hidden;background:#8ccdf0;color:var(--t);font:14px system-ui,sans-serif;touch-action:none;user-select:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+.bar{position:fixed;left:6px;right:6px;background:var(--p);border-radius:14px;padding:6px 9px}
+#top{top:calc(env(safe-area-inset-top,0px) + 6px)}.r{display:flex;justify-content:space-between;gap:4px;margin-bottom:2px}
+.q{font-size:12px;color:#9be37a}.ob{font-size:12px;color:var(--a)}
+#log{position:fixed;left:10px;top:calc(env(safe-area-inset-top,0px) + 108px);font-size:12px;text-shadow:0 1px 3px #000;pointer-events:none;max-width:58%;color:#fff}
+#joy{position:fixed;left:18px;bottom:calc(env(safe-area-inset-bottom,0px) + 118px);width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.4)}
+#kn{position:absolute;left:35px;top:35px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.6)}
+#tools{bottom:calc(env(safe-area-inset-bottom,0px) + 6px)}
+.row{display:flex;gap:4px;overflow-x:auto}.row button{flex:0 0 auto;min-width:44px;background:#1d3a5c;color:var(--t);border:0;border-radius:10px;padding:8px 6px;font-size:13px}
+.row button.on{background:var(--a);color:#222;font-weight:700}.row button:disabled{opacity:.35}
+#sub{margin-bottom:5px;display:none}
+#trade{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 150px);background:var(--p);border:2px solid #f4a261;border-radius:14px;padding:8px;display:none;text-align:center;font-size:12px;width:72%}
+#trade button{margin:3px;background:#1d3a5c;color:var(--t);border:0;border-radius:9px;padding:7px 8px;font-size:12px}
+#ban{position:fixed;left:50%;top:30%;transform:translate(-50%,-20px);opacity:0;transition:.4s;text-align:center;background:var(--p);padding:12px 20px;border-radius:16px;font-size:20px;font-weight:700;pointer-events:none;border:2px solid var(--a);width:max-content;max-width:88%}
+#ban small{display:block;font-size:13px;font-weight:400;margin-top:3px}#ban.show{opacity:1;transform:translate(-50%,0)}
+.fl{position:fixed;transform:translate(-50%,0);font-weight:700;font-size:16px;color:#fff;text-shadow:0 2px 4px #000;animation:up 1.8s forwards;pointer-events:none}@keyframes up{to{transform:translate(-50%,-70px);opacity:0}}
+#ev,#fin{position:fixed;inset:0;background:rgba(5,12,22,.82);display:none;align-items:center;justify-content:center;padding:14px;text-align:center}
+#ev>div,#fin>div{background:#10253d;border:2px solid var(--a);border-radius:16px;padding:14px;max-width:440px;max-height:88vh;overflow:auto}
+#ev h2,#fin h1{margin:0 0 8px;font-size:19px}#ev p{margin:0 0 10px;line-height:1.4;text-align:left;font-size:13.5px}
+#ev button,#fin button{display:block;width:100%;margin:5px 0;background:#1d3a5c;color:var(--t);border:0;border-radius:10px;padding:10px;font-size:13.5px;text-align:left}#ev button:disabled{opacity:.4}#ev button small{display:block;opacity:.75;font-size:11.5px}#ev button.on{background:#2c6b3f}
+#mm{position:fixed;right:8px;top:calc(env(safe-area-inset-top,0px) + 108px);width:110px;height:110px;border:2px solid var(--a);border-radius:8px;opacity:.92}
+#act{position:fixed;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 122px);display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+#act button{background:var(--a);color:#222;border:0;border-radius:12px;padding:11px 14px;font-weight:700;font-size:14px}
+#fade{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .4s}
+#app{position:fixed;inset:0;z-index:60;background:radial-gradient(circle at 30% 20%,#1d4a7a,#0a1628 70%);display:none;overflow:auto;touch-action:pan-y;color:#eaf2ff}
+#app .aw{max-width:980px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 12px 24px}
+#app .ah{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:18px}
+#app select{background:#17304d;color:#fff;border:0;border-radius:8px;padding:8px}
+#app .card{background:rgba(9,22,38,.85);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:14px;margin-bottom:12px}
+#app h2{margin:0 0 10px;font-size:20px}
+#app .lg{display:grid;grid-template-columns:1fr 1fr;gap:8px}#app .lg button{background:#17304d;color:#fff;border:2px solid #ffd166;border-radius:12px;padding:14px;font-size:16px}
+#app label{display:block;margin:8px 0;font-size:13px}#app input{display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:11px;border-radius:10px;border:1px solid #456;background:#0d2036;color:#fff;font-size:15px}
+#app .big{background:#ffd166;color:#222;border:0;border-radius:12px;padding:12px 16px;font-weight:700;font-size:15px;margin:4px 0;width:100%}
+#app .lnk{background:transparent;color:#9cc7ff;border:0;padding:10px;font-size:13px;width:100%}
+#app .er{color:#ff8a8a;min-height:18px;font-size:13px}
+#app .avs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}#app .avs button{font-size:24px;background:#17304d;border:2px solid transparent;border-radius:12px;padding:6px 8px}#app .avs button.on{border-color:#ffd166}
+#app .mg{display:grid;grid-template-columns:1fr;gap:12px}@media(min-width:760px){#app .mg{grid-template-columns:300px 1fr}}
+#app .pf{display:flex;gap:12px;align-items:center}#app .av{font-size:46px}
+#app .tot{display:flex;flex-wrap:wrap;gap:8px;font-size:16px;margin-top:6px}
+#app .nw{display:flex;gap:8px;margin-bottom:10px}#app .nw input{margin:0}#app .nw .big{width:auto;white-space:nowrap}
+#app .sv{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid rgba(255,255,255,.12);padding:10px 0}#app .sv .big{width:auto}#app .sv .lnk{width:auto}
+#app .em{opacity:.7}
+#ev .tg{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px}#ev .tg button{margin:0;font-size:12.5px;text-align:center}
+</style></head><body>
+<canvas id="c"></canvas><div id="top" class="bar"></div><div id="log"></div><div id="joy"><div id="kn"></div></div><div id="trade"></div><canvas id="mm" width="168" height="168"></canvas><div id="act"></div><div id="fade"></div>
+<div id="tools" class="bar"><div id="sub" class="row"></div><div id="mn" class="row"></div></div><div id="ban"></div><div id="ev"></div>
+<div id="fin"><div><h1></h1><p></p><button onclick="location.reload()">Играть снова</button></div></div>
+<div id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+onerror=(m,u,l,c)=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:70px;left:6px;right:6px;background:#a00;color:#fff;padding:6px;font:11px monospace;z-index:99';d.textContent='Ошибка: '+m+' ('+l+':'+c+')';document.body.appendChild(d)};
+const $=s=>document.querySelector(s),R=()=>GEN?sm():Math.random(),cl=(v,a,b)=>Math.max(a,Math.min(b,v)),rr=a=>a[R()*a.length|0],fi=Math.floor,wait=ms=>new Promise(r=>setTimeout(r,ms));
+const G=56,CS=3,HW=G*CS/2,DL=110,D4=[[1,0],[-1,0],[0,1],[0,-1]],gx=v=>fi((v+HW)/CS),cw=c=>c*CS-HW+CS/2,I=(x,z)=>z*G+x,ok=(x,z)=>x>=0&&z>=0&&x<G&&z<G,rc=z=>Math.round(20+4*Math.sin(z*.22));
+let GEN=true;function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const ST=(()=>{try{localStorage.setItem('_t','1');localStorage.removeItem('_t');return localStorage}catch(e){const m={};return{getItem:k=>m[k]??null,setItem:(k,v)=>{m[k]=String(v)},removeItem:k=>{delete m[k]}}}})();
+let INT=null;try{INT=JSON.parse(ST.getItem('civ_intent')||'null')}catch(e){}
+const SEED=INT&&INT.seed?INT.seed:(Math.random()*1e9|0),sm=mulberry(SEED);
+const LANGS=[['ru','Русский'],['en','English'],['es','Español'],['de','Deutsch'],['fr','Français'],['pt','Português'],['it','Italiano'],['tr','Türkçe'],['zh','中文'],['ja','日本語']];
+let LANG=ST.getItem('civ_lang');if(!LANGS.some(l=>l[0]==LANG)){const n=((navigator&&navigator.language)||'ru').slice(0,2);LANG=LANGS.some(l=>l[0]==n)?n:'ru'}
+const KEYS=[],DICT={},KI={};
+const NRM=s=>s.replace(/\d+(?:\.\d+)?/g,'#');
+function DEF(ru,...tr){KEYS.push(NRM(ru));['en','es','de','fr','pt','it','tr','zh','ja'].forEach((l,i)=>{(DICT[l]=DICT[l]||[])[KEYS.length-1]=NRM(tr[i]||'')})}
+function TX(s){if(LANG=='ru'||typeof s!='string')return s;const nums=[],k=s.replace(/\d+(?:\.\d+)?/g,m=>{nums.push(m);return '#'}),i=KI[k];if(i===undefined)return s;const o=DICT[LANG][i];if(!o)return s;let n=0;return o.replace(/#/g,()=>nums[n++]??'#')}
+const TXE=s=>{const i=s.indexOf(' ');return i>0&&!/[А-Яа-яЁё]/.test(s.slice(0,i))?s.slice(0,i+1)+TX(s.slice(i+1)):TX(s)};
+DEF('Ходить','Walk','Caminar','Gehen','Marcher','Andar','Cammina','Yürü','行走','歩く');
+DEF('Грядки','Fields','Campos','Felder','Champs','Campos','Campi','Tarla','农田','畑');
+DEF('Канал','Canal','Canal','Kanal','Canal','Canal','Canale','Kanal','水渠','水路');
+DEF('Дамба','Dam','Presa','Damm','Barrage','Represa','Diga','Baraj','水坝','ダム');
+DEF('Дорога','Road','Camino','Straße','Route','Estrada','Strada','Yol','道路','道');
+DEF('Здания','Build','Edificios','Bauen','Bâtiments','Prédios','Edifici','Yapılar','建筑','建物');
+DEF('Войти','Enter','Entrar','Eintreten','Entrer','Entrar','Entra','Gir','进入','入る');
+DEF('Выйти','Exit','Salir','Verlassen','Sortir','Sair','Esci','Çık','离开','出る');
+DEF('Торговать','Trade','Comerciar','Handeln','Commercer','Negociar','Commercia','Ticaret','交易','取引');
+DEF('Закрыть','Close','Cerrar','Schließen','Fermer','Fechar','Chiudi','Kapat','关闭','閉じる');
+DEF('Понятно','Got it','Entendido','Verstanden','Compris','Entendi','Capito','Anladım','明白了','了解');
+DEF('Уйти','Leave','Irse','Gehen','Partir','Sair','Vai via','Ayrıl','离开','去る');
+DEF('Продать','Sell','Vender','Verkaufen','Vendre','Vender','Vendi','Sat','出售','売る');
+DEF('Купить','Buy','Comprar','Kaufen','Acheter','Comprar','Compra','Satın al','购买','買う');
+DEF('Подарок','Gift','Regalo','Geschenk','Cadeau','Presente','Dono','Hediye','礼物','贈り物');
+DEF('Охотиться','Hunt','Cazar','Jagen','Chasser','Caçar','Caccia','Avlan','狩猎','狩る');
+DEF('Меню','Menu','Menú','Menü','Menu','Menu','Menu','Menü','菜单','メニュー');
+DEF('Зерно','Grain','Grano','Getreide','Blé','Grão','Grano','Tahıl','粮食','穀物');
+DEF('Семена','Seeds','Semillas','Saat','Graines','Sementes','Semi','Tohum','种子','種');
+DEF('Дерево','Wood','Madera','Holz','Bois','Madeira','Legno','Odun','木材','木材');
+DEF('Камень','Stone','Piedra','Stein','Pierre','Pedra','Pietra','Taş','石头','石');
+DEF('Монеты','Coins','Monedas','Münzen','Pièces','Moedas','Monete','Sikke','金币','コイン');
+DEF('Знания','Knowledge','Saber','Wissen','Savoir','Saber','Sapere','Bilgi','知识','知識');
+DEF('День','Day','Día','Tag','Jour','Dia','Giorno','Gün','第','日');
+DEF('Деревня','Village','Aldea','Dorf','Village','Aldeia','Villaggio','Köy','村庄','村');
+DEF('Посёлок','Town','Pueblo','Stadt','Bourg','Vila','Cittadina','Kasaba','镇','町');
+DEF('Город','City','Ciudad','Metropole','Cité','Cidade','Città','Şehir','城市','都市');
+DEF('🌿 Луга','🌿 Meadows','🌿 Prados','🌿 Wiesen','🌿 Prairies','🌿 Campos','🌿 Prati','🌿 Çayırlar','🌿 草地','🌿 草原');
+DEF('🏜 Пустыня','🏜 Desert','🏜 Desierto','🏜 Wüste','🏜 Désert','🏜 Deserto','🏜 Deserto','🏜 Çöl','🏜 沙漠','🏜 砂漠');
+DEF('❄ Ледяные вершины','❄ Icy Peaks','❄ Cumbres heladas','❄ Eisgipfel','❄ Cimes glacées','❄ Picos gelados','❄ Vette ghiacciate','❄ Buzlu Zirveler','❄ 冰峰','❄ 氷の山頂');
+DEF('🍄 Грибные болота','🍄 Mushroom Swamps','🍄 Pantanos de hongos','🍄 Pilzsümpfe','🍄 Marais aux champignons','🍄 Pântanos de cogumelos','🍄 Paludi dei funghi','🍄 Mantar Bataklığı','🍄 蘑菇沼泽','🍄 キノコ沼');
+DEF('🌸 Сакуровая роща','🌸 Cherry Grove','🌸 Bosque de cerezos','🌸 Kirschhain','🌸 Bosquet de cerisiers','🌸 Bosque de cerejeiras','🌸 Bosco di ciliegi','🌸 Kiraz Korusu','🌸 樱花林','🌸 桜の林');
+DEF('🌲 Тайга','🌲 Taiga','🌲 Taiga','🌲 Taiga','🌲 Taïga','🌲 Taiga','🌲 Taiga','🌲 Tayga','🌲 针叶林','🌲 タイガ');
+DEF('🌋 Вулканические земли','🌋 Volcanic Lands','🌋 Tierras volcánicas','🌋 Vulkanland','🌋 Terres volcaniques','🌋 Terras vulcânicas','🌋 Terre vulcaniche','🌋 Volkanik Topraklar','🌋 火山地带','🌋 火山地帯');
+DEF('Дом','House','Casa','Haus','Maison','Casa','Casa','Ev','房屋','家');
+DEF('Рынок','Market','Mercado','Markt','Marché','Mercado','Mercato','Pazar','市场','市場');
+DEF('Булочная','Bakery','Panadería','Bäckerei','Boulangerie','Padaria','Panetteria','Fırın','面包房','パン屋');
+DEF('Школа','School','Escuela','Schule','École','Escola','Scuola','Okul','学校','学校');
+DEF('Лаборатория','Laboratory','Laboratorio','Labor','Laboratoire','Laboratório','Laboratorio','Laboratuvar','实验室','研究所');
+DEF('Храм','Temple','Templo','Tempel','Temple','Templo','Tempio','Tapınak','神庙','神殿');
+DEF('Лесопилка','Sawmill','Aserradero','Sägewerk','Scierie','Serraria','Segheria','Kereste','锯木厂','製材所');
+DEF('Каменоломня','Quarry','Cantera','Steinbruch','Carrière','Pedreira','Cava','Taş ocağı','采石场','採石場');
+DEF('Кузница','Forge','Herrería','Schmiede','Forge','Forja','Fucina','Demirci','铁匠铺','鍛冶屋');
+DEF('Мельница','Mill','Molino','Mühle','Moulin','Moinho','Mulino','Değirmen','磨坊','製粉所');
+DEF('Мануфактура','Factory','Manufactura','Manufaktur','Manufacture','Manufatura','Manifattura','Manufaktür','工场','工場');
+DEF('Башня','Tower','Torre','Turm','Tour','Torre','Torre','Kule','塔楼','塔');
+DEF('Таверна','Tavern','Taberna','Taverne','Taverne','Taverna','Taverna','Han','酒馆','酒場');
+DEF('Больница','Hospital','Hospital','Spital','Hôpital','Hospital','Ospedale','Hastane','医院','病院');
+DEF('Скотный двор','Farmyard','Granja','Viehhof','Ferme d’élevage','Curral','Fattoria','Çiftlik','牲畜场','牧場');
+DEF('Казарма','Barracks','Cuartel','Kaserne','Caserne','Quartel','Caserma','Kışla','兵营','兵舎');
+DEF('Письменность','Writing','Escritura','Schrift','Écriture','Escrita','Scrittura','Yazı','文字','文字');
+DEF('Орошение','Irrigation','Riego','Bewässerung','Irrigation','Irrigação','Irrigazione','Sulama','灌溉','灌漑');
+DEF('Плуг','Plow','Arado','Pflug','Charrue','Arado','Aratro','Saban','犁','犂');
+DEF('Кладка','Masonry','Albañilería','Mauerwerk','Maçonnerie','Alvenaria','Muratura','Duvarcılık','砌石','石工');
+DEF('Монета','Coinage','Moneda','Münzwesen','Monnaie','Cunhagem','Conio','Para','货币','貨幣');
+DEF('Математика','Mathematics','Matemáticas','Mathematik','Mathématiques','Matemática','Matematica','Matematik','数学','数学');
+DEF('Философия','Philosophy','Filosofía','Philosophie','Philosophie','Filosofia','Filosofia','Felsefe','哲学','哲学');
+DEF('Медицина','Medicine','Medicina','Medizin','Médecine','Medicina','Medicina','Tıp','医学','医学');
+DEF('Металлургия','Metallurgy','Metalurgia','Metallurgie','Métallurgie','Metalurgia','Metallurgia','Metalurji','冶金','冶金');
+DEF('Промышленность','Industry','Industria','Industrie','Industrie','Indústria','Industria','Sanayi','工业','産業');
+DEF('Право','Law','Derecho','Recht','Droit','Direito','Diritto','Hukuk','法律','法');
+DEF('Открывает Школы: знания растут быстрее','Unlocks Schools: knowledge grows faster','Desbloquea escuelas: el saber crece más rápido','Schaltet Schulen frei: Wissen wächst schneller','Débloque les écoles : le savoir croît plus vite','Libera escolas: o saber cresce mais rápido','Sblocca le scuole: il sapere cresce più in fretta','Okulları açar: bilgi daha hızlı artar','解锁学校，知识增长更快','学校が解禁され、知識が早く増える');
+DEF('Вода достаёт на # клетки, посевы дольше держат влагу','Water reaches # cells, crops hold moisture longer','El agua llega a # celdas, los cultivos retienen más humedad','Wasser reicht # Felder weit, Saat hält Feuchtigkeit länger','L’eau atteint # cases, les cultures gardent l’humidité','A água alcança # células, as culturas retêm mais umidade','L’acqua arriva a # celle, i campi restano umidi più a lungo','Su # kareye ulaşır, ekinler nemi daha uzun tutar','水可到达#格，作物保湿更久','水が#マス先まで届き、作物が長く潤う');
+DEF('Урожай +50%','Harvest +50%','Cosecha +50%','Ernte +50 %','Récolte +50 %','Colheita +50%','Raccolto +50%','Hasat +%50','收成+50%','収穫+50%');
+DEF('Дамбы и дороги дешевле','Dams and roads cost less','Presas y caminos más baratos','Dämme und Straßen billiger','Barrages et routes moins chers','Represas e estradas mais baratas','Dighe e strade più economiche','Baraj ve yollar ucuzlar','水坝和道路更便宜','ダムと道が安くなる');
+DEF('Открывает Рынок и Булочную, доход +50%','Unlocks Market and Bakery, income +50%','Desbloquea mercado y panadería, ingresos +50%','Schaltet Markt und Bäckerei frei, Einkommen +50 %','Débloque marché et boulangerie, revenu +50 %','Libera mercado e padaria, renda +50%','Sblocca mercato e panetteria, reddito +50%','Pazar ve fırını açar, gelir +%50','解锁市场和面包房，收入+50%','市場とパン屋が解禁、収入+50%');
+DEF('Открывает Лаборатории (×# знаний)','Unlocks Laboratories (×# knowledge)','Desbloquea laboratorios (×# saber)','Schaltet Labore frei (×# Wissen)','Débloque les laboratoires (×# savoir)','Libera laboratórios (×# saber)','Sblocca i laboratori (×# sapere)','Laboratuvarları açar (×# bilgi)','解锁实验室（知识×#）','研究所が解禁（知識×#）');
+DEF('Открывает Храмы, культура ×2','Unlocks Temples, culture ×2','Desbloquea templos, cultura ×2','Schaltet Tempel frei, Kultur ×2','Débloque les temples, culture ×2','Libera templos, cultura ×2','Sblocca i templi, cultura ×2','Tapınakları açar, kültür ×2','解锁神庙，文化×2','神殿が解禁、文化×2');
+DEF('Население растёт вдвое быстрее','Population grows twice as fast','La población crece el doble de rápido','Bevölkerung wächst doppelt so schnell','La population croît deux fois plus vite','A população cresce o dobro','La popolazione cresce il doppio','Nüfus iki kat hızlı artar','人口增长翻倍','人口が倍速で増える');
+DEF('Открывает Кузницу','Unlocks the Forge','Desbloquea la herrería','Schaltet die Schmiede frei','Débloque la forge','Libera a forja','Sblocca la fucina','Demirciyi açar','解锁铁匠铺','鍛冶屋が解禁');
+DEF('Открывает Мануфактуру','Unlocks the Factory','Desbloquea la manufactura','Schaltet die Manufaktur frei','Débloque la manufacture','Libera a manufatura','Sblocca la manifattura','Manufaktürü açar','解锁工场','工場が解禁');
+DEF('Суд: советники хуже лгут','Courts: advisors lie worse','Tribunales: los consejeros mienten peor','Gericht: Berater lügen schlechter','Tribunaux : les conseillers mentent moins bien','Tribunais: conselheiros mentem pior','Tribunali: i consiglieri mentono peggio','Mahkeme: danışmanlar daha kötü yalan söyler','法庭：顾问更难撒谎','裁判：顧問は嘘が下手になる');
+DEF('💧 Грядки сохнут! Прокопайте канал от реки (🌱 рядом с водой).','💧 Fields are drying! Dig a canal from the river (🌱 next to water).','💧 ¡Los campos se secan! Cava un canal desde el río (🌱 junto al agua).','💧 Felder trocknen aus! Graben Sie einen Kanal vom Fluss (🌱 am Wasser).','💧 Les champs sèchent ! Creusez un canal depuis la rivière (🌱 près de l’eau).','💧 Os campos estão secando! Cave um canal do rio (🌱 perto da água).','💧 I campi si seccano! Scava un canale dal fiume (🌱 vicino all’acqua).','💧 Tarlalar kuruyor! Nehirden kanal açın (🌱 suya yakın).','💧 农田干涸！从河里挖一条水渠（🌱靠近水）。','💧 畑が乾いています！川から水路を掘りましょう（🌱水の近く）。');
+DEF('🌾 Зерна на # дн. Продайте дерево или камень на рынке и купите зерно.','🌾 Grain for # days. Sell wood or stone at the market and buy grain.','🌾 Grano para # días. Vende madera o piedra y compra grano.','🌾 Getreide für # Tage. Verkaufen Sie Holz oder Stein und kaufen Sie Getreide.','🌾 Blé pour # jours. Vendez du bois ou de la pierre et achetez du blé.','🌾 Grão para # dias. Venda madeira ou pedra e compre grão.','🌾 Grano per # giorni. Vendi legno o pietra e compra grano.','🌾 # günlük tahıl var. Odun veya taş satıp tahıl alın.','🌾 粮食够吃#天。出售木材或石头，再买粮食。','🌾 穀物は#日分。木材か石を売って穀物を買いましょう。');
+DEF('🌱 Мало семян: купите на рынке или дождитесь колосьев.','🌱 Few seeds: buy some at the market or wait for gleaned ears.','🌱 Pocas semillas: compra en el mercado o espera las espigas.','🌱 Wenig Saat: auf dem Markt kaufen oder Ähren sammeln.','🌱 Peu de graines : achetez-en ou attendez les épis glanés.','🌱 Poucas sementes: compre no mercado ou colete espigas.','🌱 Pochi semi: comprali al mercato o raccogli spighe.','🌱 Tohum az: pazardan alın ya da başak toplayın.','🌱 种子不足：去市场购买或拾穗。','🌱 種が少ない：市場で買うか穂を拾いましょう。');
+DEF('🪙 Мало монет: продайте лишний камень или дерево (🤝 у рынка).','🪙 Low on coins: sell spare stone or wood (🤝 near a market).','🪙 Pocas monedas: vende piedra o madera sobrante (🤝 en un mercado).','🪙 Wenig Münzen: Überschüssigen Stein oder Holz verkaufen (🤝 am Markt).','🪙 Peu de pièces : vendez pierre ou bois en trop (🤝 au marché).','🪙 Poucas moedas: venda pedra ou madeira sobrando (🤝 no mercado).','🪙 Poche monete: vendi pietra o legno in eccesso (🤝 al mercato).','🪙 Sikke az: fazla taş veya odun satın (🤝 pazarda).','🪙 金币不足：出售多余的石头或木材（市场旁🤝）。','🪙 コインが少ない：余った石や木材を売りましょう（市場で🤝）。');
+DEF('🏠 Нет места для новых жителей — стройте дома.','🏠 No room for newcomers — build houses.','🏠 No hay sitio para más gente: construye casas.','🏠 Kein Platz für Neue – bauen Sie Häuser.','🏠 Plus de place pour les nouveaux : construisez des maisons.','🏠 Sem espaço para novos moradores: construa casas.','🏠 Niente posto per i nuovi arrivati: costruisci case.','🏠 Yeni gelenlere yer yok — ev yapın.','🏠 没有空位容纳新居民——请盖房子。','🏠 新しい住民の空きがありません。家を建てましょう。');
+DEF('🔬 Хватает знаний на Письменность!','🔬 Enough knowledge for Writing!','🔬 ¡Ya hay saber para la Escritura!','🔬 Wissen reicht für die Schrift!','🔬 Assez de savoir pour l’Écriture !','🔬 Saber suficiente para a Escrita!','🔬 Sapere sufficiente per la Scrittura!','🔬 Yazı için bilgi yeterli!','🔬 知识足够研究文字了！','🔬 文字を研究する知識が貯まりました！');
+DEF('📚 Постройте Школу — она даёт знания.','📚 Build a School — it produces knowledge.','📚 Construye una escuela: da saber.','📚 Bauen Sie eine Schule – sie bringt Wissen.','📚 Construisez une école : elle donne du savoir.','📚 Construa uma escola: ela gera saber.','📚 Costruisci una scuola: produce sapere.','📚 Okul yapın — bilgi üretir.','📚 建一所学校——它能产生知识。','📚 学校を建てましょう。知識が増えます。');
+DEF('⚠ Соседи страдают от засухи: вы перекрыли им воду.','⚠ Neighbors suffer drought: you cut off their water.','⚠ Tus vecinos sufren sequía: les cortaste el agua.','⚠ Nachbarn leiden unter Dürre: Sie haben ihr Wasser abgeschnitten.','⚠ Vos voisins souffrent de sécheresse : vous leur avez coupé l’eau.','⚠ Os vizinhos sofrem seca: você cortou a água deles.','⚠ I vicini soffrono la siccità: hai tagliato la loro acqua.','⚠ Komşular kuraklıkta: suyunu kestiniz.','⚠ 邻居遭遇干旱：是你截断了他们的水。','⚠ 隣人が干ばつに苦しんでいます。あなたが水を止めました。');
+DEF('💡 Река течёт с севера. Дамба блокирует воду ниже — канал выше дамбы орошает ваши поля.','💡 The river flows from the north. A dam blocks water downstream — a canal above it irrigates your fields.','💡 El río fluye desde el norte. Una presa corta el agua río abajo; un canal por encima riega tus campos.','💡 Der Fluss kommt aus dem Norden. Ein Damm sperrt das Wasser darunter – ein Kanal oberhalb bewässert Ihre Felder.','💡 La rivière vient du nord. Un barrage coupe l’eau en aval — un canal en amont irrigue vos champs.','💡 O rio vem do norte. Uma represa bloqueia a água abaixo; um canal acima irriga seus campos.','💡 Il fiume scorre da nord. Una diga blocca l’acqua a valle: un canale a monte irriga i campi.','💡 Nehir kuzeyden akar. Baraj aşağıdaki suyu keser — barajın üstündeki kanal tarlaları sular.','💡 河水自北向南流。水坝会截断下游的水，坝上游的水渠可灌溉农田。','💡 川は北から流れます。ダムは下流の水を止め、上流の水路が畑を潤します。');
+DEF('🌱 Весна','🌱 Spring','🌱 Primavera','🌱 Frühling','🌱 Printemps','🌱 Primavera','🌱 Primavera','🌱 İlkbahar','🌱 春天','🌱 春');
+DEF('☀ Лето','☀ Summer','☀ Verano','☀ Sommer','☀ Été','☀ Verão','☀ Estate','☀ Yaz','☀ 夏天','☀ 夏');
+DEF('🍂 Осень','🍂 Autumn','🍂 Otoño','🍂 Herbst','🍂 Automne','🍂 Outono','🍂 Autunno','🍂 Sonbahar','🍂 秋天','🍂 秋');
+DEF('❄ Зима','❄ Winter','❄ Invierno','❄ Winter','❄ Hiver','❄ Inverno','❄ Inverno','❄ Kış','❄ 冬天','❄ 冬');
+DEF('Рост ускоряется','Growth speeds up','El crecimiento se acelera','Wachstum beschleunigt sich','La croissance s’accélère','O crescimento acelera','La crescita accelera','Büyüme hızlanır','生长加快','成長が早まる');
+DEF('Жарко: риск засухи','Hot: drought risk','Calor: riesgo de sequía','Heiß: Dürregefahr','Chaleur : risque de sécheresse','Calor: risco de seca','Caldo: rischio siccità','Sıcak: kuraklık riski','炎热：有干旱风险','暑い：干ばつの恐れ');
+DEF('Урожаи богаче на #%','Harvests richer by #%','Cosechas más ricas en un #%','Ernten um #% reicher','Récoltes plus riches de #%','Colheitas #% mais ricas','Raccolti più ricchi del #%','Hasat #% daha bol','收成增加#%','収穫が#%増える');
+DEF('Поля спят, жителям нужно на #% больше еды — копите зерно!','Fields sleep, people need #% more food — stockpile grain!','Los campos duermen; hace falta un #% más de comida: ¡guarda grano!','Felder ruhen, Menschen brauchen #% mehr Nahrung – Getreide horten!','Les champs dorment, il faut #% de nourriture en plus — stockez du blé !','Os campos dormem; é preciso #% mais comida — estoque grão!','I campi dormono, serve il #% di cibo in più: accumula grano!','Tarlalar uyuyor, halk %# daha fazla yiyecek ister — tahıl biriktirin!','田地休眠，居民需多#%食物——请囤粮！','畑は休眠し、食料が#%多く必要です。穀物を蓄えましょう！');
+DEF('🏙 Новая эра','🏙 A new era','🏙 Nueva era','🏙 Neue Ära','🏙 Nouvelle ère','🏙 Nova era','🏙 Nuova era','🏙 Yeni çağ','🏙 新时代','🏙 新しい時代');
+DEF('☀ Засуха','☀ Drought','☀ Sequía','☀ Dürre','☀ Sécheresse','☀ Seca','☀ Siccità','☀ Kuraklık','☀ 干旱','☀ 干ばつ');
+DEF('Река мелеет — вода доходит не так далеко','The river shrinks — water reaches less far','El río mengua: el agua llega menos lejos','Der Fluss schrumpft – das Wasser reicht nicht weit','La rivière baisse — l’eau va moins loin','O rio diminui — a água chega menos longe','Il fiume cala: l’acqua arriva meno lontano','Nehir çekiliyor — su daha az ilerliyor','河水减少，水流不到远处','川が細り、水が遠くまで届かない');
+DEF('🌧 Ливень','🌧 Downpour','🌧 Aguacero','🌧 Platzregen','🌧 Averse','🌧 Aguaceiro','🌧 Acquazzone','🌧 Sağanak','🌧 暴雨','🌧 豪雨');
+DEF('Поля растут вдвое быстрее','Fields grow twice as fast','Los campos crecen el doble de rápido','Felder wachsen doppelt so schnell','Les champs poussent deux fois plus vite','Os campos crescem o dobro','I campi crescono il doppio','Tarlalar iki kat hızlı büyür','农田生长翻倍','畑が倍の速さで育つ');
+DEF('Ледяные вершины. Отсюда река Валдора течёт на юг…','Icy peaks. From here the river Valdor flows south…','Cumbres heladas. Desde aquí el río Valdor corre hacia el sur…','Eisgipfel. Von hier fließt der Valdor nach Süden…','Cimes glacées. D’ici, la rivière Valdor coule vers le sud…','Picos gelados. Daqui o rio Valdor corre para o sul…','Vette ghiacciate. Da qui il fiume Valdor scorre a sud…','Buzlu zirveler. Valdor nehri buradan güneye akar…','冰封的山峰。瓦尔多河从这里向南流去……','氷の山頂。ここからヴァルドル川が南へ流れる……');
+DEF('Её воды кормят поля — и ссорят народы…','Its waters feed the fields — and divide peoples…','Sus aguas alimentan los campos… y enfrentan a los pueblos…','Sein Wasser nährt die Felder – und entzweit Völker…','Ses eaux nourrissent les champs — et divisent les peuples…','Suas águas alimentam os campos — e dividem os povos…','Le sue acque nutrono i campi e dividono i popoli…','Suları tarlaları besler — ve halkları böler…','它的水滋养农田，也让民族反目……','その水は畑を潤し、民を争わせる……');
+DEF('Ваша деревня. Ваш народ. Ваша судьба.','Your village. Your people. Your fate.','Tu aldea. Tu pueblo. Tu destino.','Ihr Dorf. Ihr Volk. Ihr Schicksal.','Votre village. Votre peuple. Votre destin.','Sua aldeia. Seu povo. Seu destino.','Il tuo villaggio. Il tuo popolo. Il tuo destino.','Köyünüz. Halkınız. Kaderiniz.','你的村庄。你的子民。你的命运。','あなたの村。あなたの民。あなたの運命。');
+DEF('📜 Рассвет цивилизации','📜 Dawn of Civilization','📜 El amanecer de la civilización','📜 Morgenröte der Zivilisation','📜 L’aube de la civilisation','📜 A aurora da civilização','📜 L’alba della civiltà','📜 Uygarlığın Şafağı','📜 文明的曙光','📜 文明の夜明け');
+DEF('Вы — старейшина маленькой деревни на берегу реки. Вода течёт с севера на юг; ниже по течению живут Ольховая, кочевники, племя и рыцари Железной Марки. Ходите джойстиком, ведите пальцем по земле при выбранном инструменте. Грядки (🌱) нужна вода рядом (💧 канал от реки). Жители сами сеют и жнут, но семена кончаются — торгуйте. При дворе давно шепчутся об измене: входите в здания (🚪), говорите с советниками — и не верьте всему, что слышите.','You are the elder of a small riverside village. Water flows north to south; downstream live Olkhovaya, the nomads, the tribe and the knights of the Iron March. Walk with the joystick, drag a finger over the ground with a tool selected. Fields (🌱) need water nearby (💧 a canal from the river). Villagers sow and reap by themselves, but seeds run out — trade. At court there are whispers of treason: enter buildings (🚪), talk to advisors — and do not believe everything you hear.','Eres el anciano de una pequeña aldea junto al río. El agua fluye de norte a sur; río abajo viven Olkhovaya, los nómadas, la tribu y los caballeros de la Marca de Hierro. Camina con el joystick y arrastra el dedo sobre el suelo con una herramienta. Los campos (🌱) necesitan agua cerca (💧 un canal del río). Los aldeanos siembran y cosechan solos, pero las semillas se acaban: comercia. En la corte se susurra traición: entra en los edificios (🚪), habla con los consejeros y no creas todo lo que oigas.','Sie sind der Älteste eines kleinen Dorfes am Fluss. Das Wasser fließt von Nord nach Süd; flussabwärts leben Olkhovaya, die Nomaden, der Stamm und die Ritter der Eisernen Mark. Bewegen Sie sich mit dem Joystick und ziehen Sie mit gewähltem Werkzeug den Finger über den Boden. Felder (🌱) brauchen Wasser in der Nähe (💧 Kanal vom Fluss). Die Dorfbewohner säen und ernten selbst, aber die Saat geht aus – handeln Sie. Am Hof flüstert man von Verrat: Betreten Sie Gebäude (🚪), sprechen Sie mit den Beratern – und glauben Sie nicht alles.','Vous êtes l’ancien d’un petit village au bord de la rivière. L’eau coule du nord au sud ; en aval vivent Olkhovaya, les nomades, la tribu et les chevaliers de la Marche de Fer. Déplacez-vous au joystick et faites glisser le doigt sur le sol avec un outil. Les champs (🌱) ont besoin d’eau (💧 canal depuis la rivière). Les villageois sèment et récoltent seuls, mais les graines s’épuisent : commercez. À la cour, on murmure la trahison : entrez dans les bâtiments (🚪), parlez aux conseillers — et ne croyez pas tout.','Você é o ancião de uma pequena aldeia à beira do rio. A água corre de norte a sul; rio abaixo vivem Olkhovaya, os nômades, a tribo e os cavaleiros da Marca de Ferro. Ande com o joystick e arraste o dedo no chão com uma ferramenta. Os campos (🌱) precisam de água perto (💧 canal do rio). Os aldeões semeiam e colhem sozinhos, mas as sementes acabam: negocie. Na corte sussurra-se traição: entre nos prédios (🚪), converse com os conselheiros — e não acredite em tudo.','Sei l’anziano di un piccolo villaggio sul fiume. L’acqua scorre da nord a sud; a valle vivono Olkhovaya, i nomadi, la tribù e i cavalieri della Marca di Ferro. Muoviti con il joystick e trascina il dito sul terreno con uno strumento. I campi (🌱) hanno bisogno di acqua vicina (💧 un canale dal fiume). Gli abitanti seminano e raccolgono da soli, ma i semi finiscono: commercia. A corte si sussurra di tradimento: entra negli edifici (🚪), parla con i consiglieri e non credere a tutto.','Nehir kıyısındaki küçük bir köyün ileri geleni sizsiniz. Su kuzeyden güneye akar; aşağıda Olkhovaya, göçebeler, kabile ve Demir Marka şövalyeleri yaşar. Joystick ile yürüyün, bir araç seçip parmağınızı zeminde sürükleyin. Tarlalar (🌱) yakında su ister (💧 nehirden kanal). Köylüler kendileri eker ve biçer ama tohum biter — ticaret yapın. Sarayda ihanet fısıltıları var: binalara girin (🚪), danışmanlarla konuşun — duyduğunuzun hepsine inanmayın.','你是河边小村庄的长者。河水由北向南流；下游住着奥尔霍瓦亚、游牧民、部落和铁疆骑士。用摇杆行走，选中工具后在地面上滑动手指。农田（🌱）旁需要有水（💧从河里挖渠）。村民会自己播种收割，但种子会用完——要靠交易。朝中流传着叛变的低语：进入建筑（🚪），与顾问交谈——别轻信所有话。','あなたは川辺の小さな村の長老です。水は北から南へ流れ、下流にはオルホヴァヤ、遊牧民、部族、鉄辺境の騎士が暮らします。ジョイスティックで歩き、道具を選んで地面を指でなぞります。畑（🌱）は近くに水が必要です（💧川から水路）。村人は自分で種まきと収穫をしますが、種は尽きます。取引しましょう。宮廷には裏切りの噂があります。建物に入り（🚪）、顧問と話し、聞いたことを鵜呑みにしないでください。');
+DEF('Дальше','Next','Siguiente','Weiter','Suite','Próximo','Avanti','İleri','继续','次へ');
+DEF('Начать правление','Begin your reign','Comenzar el reinado','Herrschaft beginnen','Commencer le règne','Começar o reinado','Inizia il regno','Hükümdarlığa başla','开始统治','統治を始める');
+DEF('✉ Гонец из Ольховой','✉ Messenger from Olkhovaya','✉ Mensajero de Olkhovaya','✉ Bote aus Olkhovaya','✉ Messager d’Olkhovaya','✉ Mensageiro de Olkhovaya','✉ Messaggero di Olkhovaya','✉ Olkhovaya’dan Haberci','✉ 奥尔霍瓦亚的信使','✉ オルホヴァヤの使者');
+DEF('Запыхавшийся гонец протягивает свиток: «Мы слышали, вы копаете каналы и ставите дамбы. Вода — общая. Дадите ли слово, что не оставите нас без неё?»','A breathless messenger hands you a scroll: “We hear you dig canals and build dams. Water is shared. Will you give your word not to leave us without it?”','Un mensajero jadeante te entrega un pergamino: «Sabemos que cavas canales y levantas presas. El agua es de todos. ¿Das tu palabra de no dejarnos sin ella?»','Ein atemloser Bote reicht eine Schriftrolle: „Wir hören, Sie graben Kanäle und bauen Dämme. Wasser gehört allen. Geben Sie Ihr Wort, uns nicht ohne Wasser zu lassen?“','Un messager essoufflé tend un parchemin : « On dit que vous creusez des canaux et bâtissez des barrages. L’eau est à tous. Promettez-vous de ne pas nous en priver ? »','Um mensageiro ofegante entrega um pergaminho: «Soubemos que você cava canais e faz represas. A água é de todos. Dá sua palavra de não nos deixar sem ela?»','Un messaggero trafelato porge una pergamena: «Sappiamo che scavi canali e costruisci dighe. L’acqua è di tutti. Prometti di non lasciarci senza?»','Nefes nefese bir haberci parşömen uzatır: «Kanal kazıp baraj yaptığınızı duyduk. Su herkesindir. Bizi susuz bırakmayacağınıza söz verir misiniz?»','一名气喘吁吁的信使递上卷轴：“听说你们挖渠筑坝。水是大家的。你能保证不让我们断水吗？”','息を切らした使者が巻物を差し出す。「あなた方が水路を掘りダムを築くと聞いた。水は皆のもの。我らから水を奪わないと約束してくれるか？」');
+DEF('Дать слово (+# отн., не вздумайте высушить их!)','Give your word (+# relations — do not dry them out!)','Dar tu palabra (+# relación; ¡no los seques!)','Wort geben (+# Beziehung – nicht austrocknen!)','Donner sa parole (+# relation — ne les asséchez pas !)','Dar a palavra (+# relação — não os seque!)','Dare la parola (+# relazioni — non prosciugarli!)','Söz ver (+# ilişki — onları kurutmayın!)','承诺（关系+#，别让他们断水！）','約束する（関係+#、水を止めないこと！）');
+DEF('Промолчать','Say nothing','Callar','Schweigen','Se taire','Ficar calado','Tacere','Sessiz kal','沉默','黙る');
+DEF('Пригрозить (−# отн.)','Threaten (−# relations)','Amenazar (−# relación)','Drohen (−# Beziehung)','Menacer (−# relation)','Ameaçar (−# relação)','Minacciare (−# relazioni)','Tehdit et (−# ilişki)','威胁（关系−#）','脅す（関係−#）');
+DEF('🎉 Праздник урожая','🎉 Harvest Festival','🎉 Fiesta de la cosecha','🎉 Erntefest','🎉 Fête des moissons','🎉 Festa da colheita','🎉 Festa del raccolto','🎉 Hasat Şenliği','🎉 丰收节','🎉 収穫祭');
+DEF('Жители просят устроить праздник у костра — музыка, танцы, фейерверки.','The villagers ask for a festival by the bonfire — music, dancing, fireworks.','Los aldeanos piden una fiesta junto a la hoguera: música, baile, fuegos artificiales.','Die Dorfbewohner wünschen ein Fest am Lagerfeuer – Musik, Tanz, Feuerwerk.','Les villageois réclament une fête autour du feu : musique, danse, feux d’artifice.','Os aldeões pedem uma festa na fogueira: música, dança, fogos.','Gli abitanti chiedono una festa al falò: musica, balli, fuochi d’artificio.','Köylüler ateş başında şenlik istiyor — müzik, dans, havai fişek.','村民请求在篝火边办一场庆典：音乐、舞蹈、烟花。','村人が焚き火の祭りを望んでいます。音楽、踊り、花火。');
+DEF('Устроить: −#🪙, +#🎭, советники довольны','Hold it: −#🪙, +#🎭, advisors pleased','Celebrarla: −#🪙, +#🎭, consejeros contentos','Feiern: −#🪙, +#🎭, Berater zufrieden','L’organiser : −#🪙, +#🎭, conseillers contents','Fazer: −#🪙, +#🎭, conselheiros felizes','Farla: −#🪙, +#🎭, consiglieri contenti','Düzenle: −#🪙, +#🎭, danışmanlar memnun','举办：−#🪙，+#🎭，顾问满意','開催：−#🪙、+#🎭、顧問が満足');
+DEF('Отказать (советники ропщут)','Decline (advisors grumble)','Rechazar (los consejeros rezongan)','Ablehnen (Berater murren)','Refuser (les conseillers grognent)','Recusar (conselheiros reclamam)','Rifiutare (i consiglieri brontolano)','Reddet (danışmanlar söylenir)','拒绝（顾问抱怨）','断る（顧問が不満）');
+DEF('🛒 Караван торговцев','🛒 Merchant Caravan','🛒 Caravana de mercaderes','🛒 Handelskarawane','🛒 Caravane de marchands','🛒 Caravana de mercadores','🛒 Carovana di mercanti','🛒 Tüccar Kervanı','🛒 商队','🛒 商人の隊商');
+DEF('Странствующий купец предлагает сделку.','A wandering merchant offers a deal.','Un mercader errante ofrece un trato.','Ein fahrender Händler macht ein Angebot.','Un marchand ambulant propose un marché.','Um mercador errante oferece um negócio.','Un mercante errante propone un affare.','Gezgin bir tüccar anlaşma önerir.','一位流浪商人提出交易。','旅の商人が取引を持ちかけます。');
+DEF('Продать #🌾 за #🪙','Sell #🌾 for #🪙','Vender #🌾 por #🪙','#🌾 für #🪙 verkaufen','Vendre #🌾 pour #🪙','Vender #🌾 por #🪙','Vendi #🌾 per #🪙','#🌾 sat, #🪙 al','出售#🌾，得#🪙','#🌾を売って#🪙を得る');
+DEF('Купить #🪨 за #🪙','Buy #🪨 for #🪙','Comprar #🪨 por #🪙','#🪨 für #🪙 kaufen','Acheter #🪨 pour #🪙','Comprar #🪨 por #🪙','Compra #🪨 per #🪙','#🪨 al, #🪙 öde','花#🪙买#🪨','#🪙で#🪨を買う');
+DEF('Отказать','Decline','Rechazar','Ablehnen','Refuser','Recusar','Rifiuta','Reddet','拒绝','断る');
+DEF('🔥 Пожар в амбаре!','🔥 Barn fire!','🔥 ¡Incendio en el granero!','🔥 Brand im Speicher!','🔥 Incendie au grenier !','🔥 Incêndio no celeiro!','🔥 Incendio nel granaio!','🔥 Ambarda yangın!','🔥 粮仓起火！','🔥 穀倉が燃えている！');
+DEF('Огонь вспыхнул среди ночи — кто-то поджёг склад','Fire broke out in the night — someone torched the storehouse','El fuego estalló de noche: alguien incendió el almacén','Mitten in der Nacht brach Feuer aus – jemand zündete das Lager an','Le feu a pris en pleine nuit : quelqu’un a incendié l’entrepôt','O fogo irrompeu à noite: alguém incendiou o depósito','Il fuoco è scoppiato di notte: qualcuno ha incendiato il magazzino','Gece yangın çıktı — biri depoyu ateşe verdi','深夜起火——有人纵火烧了仓库','夜に火の手が上がった。誰かが倉庫に火を放った');
+DEF('💥 Дамба взорвана!','💥 The dam is blown up!','💥 ¡Presa dinamitada!','💥 Damm gesprengt!','💥 Barrage dynamité !','💥 Represa explodida!','💥 Diga fatta saltare!','💥 Baraj havaya uçtu!','💥 水坝被炸毁！','💥 ダムが爆破された！');
+DEF('Вода хлынула вниз по течению','Water gushed downstream','El agua se precipitó río abajo','Das Wasser schoss flussabwärts','L’eau s’est ruée en aval','A água correu rio abaixo','L’acqua si è riversata a valle','Su aşağıya aktı','河水奔涌而下','水が下流へ溢れ出した');
+DEF('🏃 Вор!','🏃 Thief!','🏃 ¡Ladrón!','🏃 Dieb!','🏃 Voleur !','🏃 Ladrão!','🏃 Ladro!','🏃 Hırsız!','🏃 小偷！','🏃 泥棒！');
+DEF('Кто-то в плаще унёс #🪙 — догоните его (метка на карте)!','A cloaked figure stole #🪙 — catch him (marker on the map)!','Alguien con capa se llevó #🪙: ¡atrápalo (marca en el mapa)!','Ein Vermummter stahl #🪙 – fangen Sie ihn (Markierung auf der Karte)!','Un homme encapuchonné a volé #🪙 — rattrapez-le (repère sur la carte) !','Alguém encapuzado levou #🪙: pegue-o (marca no mapa)!','Un incappucciato ha rubato #🪙: prendilo (segnale sulla mappa)!','Pelerinli biri #🪙 çaldı — yakalayın (haritada işaret var)!','披斗篷的人偷走了#🪙——快追（地图上有标记）！','マントの人物が#🪙を盗んだ。追え（地図に印あり）！');
+DEF('⚔ Налёт кочевников!','⚔ Nomad raid!','⚔ ¡Ataque nómada!','⚔ Überfall der Nomaden!','⚔ Raid des nomades !','⚔ Ataque nômade!','⚔ Razzia dei nomadi!','⚔ Göçebe baskını!','⚔ 游牧民袭击！','⚔ 遊牧民の襲撃！');
+DEF('С востока скачут всадники','Riders gallop in from the east','Jinetes llegan al galope desde el este','Reiter galoppieren aus dem Osten heran','Des cavaliers arrivent de l’est','Cavaleiros chegam galopando do leste','Cavalieri galoppano da est','Doğudan atlılar geliyor','骑手从东方疾驰而来','東から騎兵が駆けてくる');
+DEF('Совет','Council','Consejo','Rat','Conseil','Conselho','Consiglio','Divan','议会','評議会');
+DEF('💡 Спросить совета','💡 Ask for advice','💡 Pedir consejo','💡 Um Rat fragen','💡 Demander conseil','💡 Pedir conselho','💡 Chiedere consiglio','💡 Tavsiye iste','💡 请教建议','💡 助言を求める');
+DEF('📊 Сколько зерна и монет?','📊 How much grain and coin?','📊 ¿Cuánto grano y monedas?','📊 Wie viel Getreide und Münzen?','📊 Combien de blé et de pièces ?','📊 Quanto grão e moedas?','📊 Quanto grano e monete?','📊 Ne kadar tahıl ve sikke?','📊 有多少粮食和金币？','📊 穀物とコインはいくら？');
+DEF('🕵 Что говорят вокруг?','🕵 What are people saying?','🕵 ¿Qué se dice por ahí?','🕵 Was erzählt man sich?','🕵 Que dit-on autour de nous ?','🕵 O que dizem por aí?','🕵 Cosa si dice in giro?','🕵 Etrafta ne söyleniyor?','🕵 外面有什么传闻？','🕵 噂は？');
+DEF('🎁 Наградить за #🪙 (+верность)','🎁 Reward for #🪙 (+loyalty)','🎁 Recompensar por #🪙 (+lealtad)','🎁 Belohnen für #🪙 (+Treue)','🎁 Récompenser pour #🪙 (+loyauté)','🎁 Recompensar por #🪙 (+lealdade)','🎁 Ricompensa per #🪙 (+lealtà)','🎁 #🪙 ile ödüllendir (+sadakat)','🎁 花#🪙奖赏（+忠诚）','🎁 #🪙で報いる（忠誠+）');
+DEF('⚖ Обвинить в измене','⚖ Accuse of treason','⚖ Acusar de traición','⚖ Des Verrats beschuldigen','⚖ Accuser de trahison','⚖ Acusar de traição','⚖ Accusare di tradimento','⚖ İhanetle suçla','⚖ 指控叛国','⚖ 反逆を告発');
+DEF('↩ Назад','↩ Back','↩ Atrás','↩ Zurück','↩ Retour','↩ Voltar','↩ Indietro','↩ Geri','↩ 返回','↩ 戻る');
+DEF('«Слушаю вас, мой господин».','“I am listening, my lord.”','«Os escucho, mi señor».','„Ich höre, mein Herr.“','« Je vous écoute, monseigneur. »','«Estou ouvindo, meu senhor.»','«Vi ascolto, mio signore.»','“Dinliyorum, efendim.”','“我在听，大人。”','「お聞きします、我が君」');
+DEF('⚖ Предатель разоблачён!','⚖ Traitor exposed!','⚖ ¡Traidor descubierto!','⚖ Verräter entlarvt!','⚖ Traître démasqué !','⚖ Traidor desmascarado!','⚖ Traditore smascherato!','⚖ Hain ifşa edildi!','⚖ 叛徒被揭穿！','⚖ 裏切り者が暴かれた！');
+DEF('⚖ Не хватило улик','⚖ Not enough evidence','⚖ Faltan pruebas','⚖ Zu wenig Beweise','⚖ Preuves insuffisantes','⚖ Provas insuficientes','⚖ Prove insufficienti','⚖ Kanıt yetersiz','⚖ 证据不足','⚖ 証拠不足');
+DEF('⚖ Ошибка!','⚖ Mistake!','⚖ ¡Error!','⚖ Irrtum!','⚖ Erreur !','⚖ Erro!','⚖ Errore!','⚖ Hata!','⚖ 错误！','⚖ 誤り！');
+DEF('Дух леса','Forest Spirit','Espíritu del bosque','Waldgeist','Esprit de la forêt','Espírito da floresta','Spirito del bosco','Orman Ruhu','森林之灵','森の精霊');
+DEF('Культ Солнца','Sun Cult','Culto del Sol','Sonnenkult','Culte du Soleil','Culto do Sol','Culto del Sole','Güneş Kültü','太阳教','太陽信仰');
+DEF('Орден Света','Order of Light','Orden de la Luz','Orden des Lichts','Ordre de la Lumière','Ordem da Luz','Ordine della Luce','Işık Tarikatı','光明骑士团','光の教団');
+DEF('Культ Предков','Ancestor Cult','Culto a los ancestros','Ahnenkult','Culte des ancêtres','Culto dos ancestrais','Culto degli antenati','Ata Kültü','祖先崇拜','祖霊信仰');
+DEF('Земледельцы','Farmers','Agricultores','Bauern','Agriculteurs','Agricultores','Contadini','Çiftçiler','农耕者','農耕民');
+DEF('Воины','Warriors','Guerreros','Krieger','Guerriers','Guerreiros','Guerrieri','Savaşçılar','战士','戦士');
+DEF('Мастера','Artisans','Artesanos','Handwerker','Artisans','Artesãos','Artigiani','Ustalar','工匠','職人');
+DEF('Купцы','Merchants','Mercaderes','Kaufleute','Marchands','Mercadores','Mercanti','Tüccarlar','商人','商人');
+DEF('Выберите веру вашего народа','Choose your people’s faith','Elige la fe de tu pueblo','Wählen Sie den Glauben Ihres Volkes','Choisissez la foi de votre peuple','Escolha a fé do seu povo','Scegli la fede del tuo popolo','Halkınızın inancını seçin','选择你子民的信仰','民の信仰を選んでください');
+DEF('Выберите культуру вашего народа','Choose your people’s culture','Elige la cultura de tu pueblo','Wählen Sie die Kultur Ihres Volkes','Choisissez la culture de votre peuple','Escolha a cultura do seu povo','Scegli la cultura del tuo popolo','Halkınızın kültürünü seçin','选择你子民的文化','民の文化を選んでください');
+DEF('Урожай +#%','Harvest +#%','Cosecha +#%','Ernte +#%','Récolte +#%','Colheita +#%','Raccolto +#%','Hasat +#%','收成+#%','収穫+#%');
+DEF('Дерево +#%, племя лесов вас уважает','Wood +#%, the forest tribe respects you','Madera +#%, la tribu del bosque te respeta','Holz +#%, der Waldstamm respektiert Sie','Bois +#%, la tribu de la forêt vous respecte','Madeira +#%, a tribo da floresta o respeita','Legno +#%, la tribù del bosco ti rispetta','Odun +#%, orman kabilesi sizi sayar','木材+#%，森林部落尊敬你','木材+#%、森の部族が敬意を払う');
+DEF('Знания +#%','Knowledge +#%','Saber +#%','Wissen +#%','Savoir +#%','Saber +#%','Sapere +#%','Bilgi +#%','知识+#%','知識+#%');
+DEF('Советники верны дольше, монеты +#%','Advisors stay loyal longer, coins +#%','Los consejeros son leales más tiempo, monedas +#%','Berater bleiben länger treu, Münzen +#%','Conseillers loyaux plus longtemps, pièces +#%','Conselheiros leais por mais tempo, moedas +#%','Consiglieri fedeli più a lungo, monete +#%','Danışmanlar daha uzun sadık, sikke +#%','顾问更忠诚，金币+#%','顧問の忠誠が長持ち、コイン+#%');
+DEF('Урожай +#%, дома дешевле','Harvest +#%, cheaper houses','Cosecha +#%, casas más baratas','Ernte +#%, billigere Häuser','Récolte +#%, maisons moins chères','Colheita +#%, casas mais baratas','Raccolto +#%, case più economiche','Hasat +#%, evler ucuz','收成+#%，房屋更便宜','収穫+#%、家が安い');
+DEF('Налёты слабее, башни дешевле','Weaker raids, cheaper towers','Ataques más débiles, torres más baratas','Schwächere Überfälle, billigere Türme','Raids plus faibles, tours moins chères','Ataques mais fracos, torres mais baratas','Razzie più deboli, torri più economiche','Baskınlar zayıf, kuleler ucuz','袭击减弱，塔楼更便宜','襲撃が弱まり、塔が安い');
+DEF('Здания дешевле, мануфактура мощнее','Cheaper buildings, stronger factory','Edificios más baratos, manufactura más potente','Billigere Gebäude, stärkere Manufaktur','Bâtiments moins chers, manufacture plus puissante','Prédios mais baratos, manufatura mais forte','Edifici più economici, manifattura più potente','Yapılar ucuz, manufaktür güçlü','建筑更便宜，工场更强','建物が安く、工場が強力');
+DEF('Рынки +#%, цены выгоднее','Markets +#%, better prices','Mercados +#%, mejores precios','Märkte +#%, bessere Preise','Marchés +#%, meilleurs prix','Mercados +#%, preços melhores','Mercati +#%, prezzi migliori','Pazarlar +#%, daha iyi fiyat','市场+#%，价格更优','市場+#%、価格が有利');
+const dayLbl=d=>LANG=='zh'?'第'+d+'天':LANG=='ja'?d+'日目':TX('День')+' '+d;
+DEF('Ратуша','Town Hall','Ayuntamiento','Rathaus','Hôtel de ville','Prefeitura','Municipio','Belediye','市政厅','市庁舎');
+DEF('Ольховая','Olkhovaya','Olkhovaya','Olchowaja','Olkhovaya','Olkhovaya','Olkhovaya','Olkhovaya','奥尔霍瓦亚','オルホヴァヤ');
+DEF('Кочевники','Nomads','Nómadas','Nomaden','Nomades','Nômades','Nomadi','Göçebeler','游牧民','遊牧民');
+DEF('Племя Орлиного Пера','Eagle Feather Tribe','Tribu de la Pluma de Águila','Stamm der Adlerfeder','Tribu de la Plume d’Aigle','Tribo da Pena de Águia','Tribù della Piuma d’Aquila','Kartal Tüyü Kabilesi','鹰羽部落','鷲の羽部族');
+DEF('Железная Марка','Iron March','Marca de Hierro','Eiserne Mark','Marche de Fer','Marca de Ferro','Marca di Ferro','Demir Marka','铁疆','鉄の辺境');
+DEF('Любят воду и мосты','They love water and bridges','Aman el agua y los puentes','Sie lieben Wasser und Brücken','Ils aiment l’eau et les ponts','Amam água e pontes','Amano l’acqua e i ponti','Su ve köprüleri severler','他们喜爱水与桥','水と橋を愛する');
+DEF('Уважают башни и дары','They respect towers and gifts','Respetan torres y regalos','Sie respektieren Türme und Geschenke','Ils respectent tours et cadeaux','Respeitam torres e presentes','Rispettano torri e doni','Kuleleri ve hediyeleri sayarlar','他们尊重塔楼与礼物','塔と贈り物を尊ぶ');
+DEF('Духи леса: рубка деревьев сердит их','Forest spirits: felling trees angers them','Espíritus del bosque: talar los enfurece','Waldgeister: Baumfällen erzürnt sie','Esprits de la forêt : abattre les irrite','Espíritos da floresta: derrubar árvores os irrita','Spiriti del bosco: abbattere alberi li irrita','Orman ruhları: ağaç kesmek onları kızdırır','森林之灵：砍树会激怒他们','森の精霊：伐採に怒る');
+DEF('Рыцари покупают камень и дерево','Knights buy stone and wood','Los caballeros compran piedra y madera','Ritter kaufen Stein und Holz','Les chevaliers achètent pierre et bois','Cavaleiros compram pedra e madeira','I cavalieri comprano pietra e legno','Şövalyeler taş ve odun alır','骑士收购石头和木材','騎士は石と木材を買う');
+DEF('Договор','Pact','Pacto','Abkommen','Pacte','Pacto','Patto','Anlaşma','协议','協定');
+DEF('Обмен знаниями','Share knowledge','Compartir saber','Wissen tauschen','Échanger du savoir','Trocar saber','Scambia sapere','Bilgi paylaş','交流知识','知識交換');
+DEF('Ритуал','Ritual','Ritual','Ritual','Rituel','Ritual','Rito','Ritüel','仪式','儀式');
+DEF('Нанять рыцаря','Hire a knight','Contratar caballero','Ritter anwerben','Engager un chevalier','Contratar cavaleiro','Assolda cavaliere','Şövalye tut','雇佣骑士','騎士を雇う');
+DEF('☰ Меню','☰ Menu','☰ Menú','☰ Menü','☰ Menu','☰ Menu','☰ Menu','☰ Menü','☰ 菜单','☰ メニュー');
+
+KEYS.forEach((k,i)=>KI[k]=i);
+
+const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(70,1,.1,300),ren=new THREE.WebGLRenderer({canvas:$('#c'),antialias:true});ren.setPixelRatio(Math.min(devicePixelRatio,2));cam.rotation.order='YXZ';
+const hemi=new THREE.HemisphereLight(0xffffff,0x446644,.7),sun=new THREE.DirectionalLight(0xfff2d0,.9),fire=new THREE.PointLight(0xff8833,0,22);scene.add(hemi,sun,fire);
+const M=(g,c)=>new THREE.Mesh(g,new THREE.MeshLambertMaterial({color:c})),box=(w,h,d,c)=>M(new THREE.BoxGeometry(w,h,d),c),cyl=(r,h,c,s=8)=>M(new THREE.CylinderGeometry(r,r,h,s),c),cone=(r,h,c,s=6)=>M(new THREE.ConeGeometry(r,h,s),c),sph=(r,c)=>M(new THREE.SphereGeometry(r,8,8),c),at=(m,x,y,z)=>(m.position.set(x,y,z),m);
+const anims=[];const anim=(d,f)=>new Promise(r=>anims.push({t:0,d,f,r}));
+// ===== мир =====
+const type=new Uint8Array(G*G),orig=new Uint8Array(G*G),wet=new Uint8Array(G*G),dist=new Int16Array(G*G),wa=new Float32Array(G*G),nz=new Float32Array(G*G),br=new Uint8Array(G*G),wear=new Float32Array(G*G);
+for(let i=0;i<G*G;i++)nz[i]=(Math.sin((i%G)*.4)*Math.cos(fi(i/G)*.35)+1)*.18;
+for(let z=0;z<G;z++){type[I(rc(z),z)]=type[I(rc(z)+1,z)]=1}orig.set(type);
+const bio=(x,z)=>z<6?2:(x>=38&&z>=30)?6:(z>=40&&x<38)?5:(x>30&&z>16&&z<30)?1:(x<11&&z>20&&z<40)?3:(x>5&&x<15&&z>9&&z<19)?4:0,BN=['🌿 Луга','🏜 Пустыня','❄ Ледяные вершины','🍄 Грибные болота','🌸 Сакуровая роща','🌲 Тайга','🌋 Вулканические земли'];
+const bump=i=>{const x=i%G,z=fi(i/G),b=bio(x,z);return b==2?.8+nz[i]*3:b==1?.2+Math.sin(x*.8+z*.5)*.3:b==6?.4+Math.sin(x*.6)*Math.cos(z*.5)*.5:0};
+const gh=i=>{const t=type[i];return t==1||t==2?-.1:t==3?1.1:(t==4?.52:t==5?.48:t==6?.55:.5+nz[i])+bump(i)};
+const im=new THREE.InstancedMesh(new THREE.BoxGeometry(CS,2,CS),new THREE.MeshLambertMaterial(),G*G),dm=new THREE.Object3D(),cc=new THREE.Color();scene.add(im);im.frustumCulled=false;const DIRT=new THREE.Color(0x9a7b55);
+function paint(i){const t=type[i];if(t==1||t==2)cc.setHex(0x6b5a3a).lerp(new THREE.Color(0x2f8fd6),wa[i]*(.85+.15*Math.sin(gt*3+i)));else if(t==3)cc.setHex(0x8a8a8a);else if(t==4)cc.setHex(0xc2a878);else if(t==5)cc.setHex(0x4a2f18);else if(t==6)cc.setHex(0x9a8f78);else{const b=bio(i%G,fi(i/G)),w=season==3&&b!=1&&b!=6?1:0;cc.setHSL(season==2&&(b==0||b==4)?.09:[.27,.12,.56,.42,.33,.4,.03][b],w?.08:[.7,.7,.3,.5,.6,.5,.25][b],cl(w?.93:[.42,.6,.9,.3,.5,.26,.2][b]+nz[i]*.4,0,.95));if(wear[i]>.15)cc.lerp(DIRT,Math.min(1,(wear[i]-.15)*1.6))}im.setColorAt(i,cc)}
+function upd(i){dm.position.set(cw(i%G),gh(i)-1,cw(fi(i/G)));dm.updateMatrix();im.setMatrixAt(i,dm.matrix);paint(i);im.instanceMatrix.needsUpdate=true;im.instanceColor.needsUpdate=true}
+let gt=DL*.04,season=0;for(let i=0;i<G*G;i++)upd(i);
+const water=new THREE.Mesh(new THREE.PlaneGeometry(600,600),new THREE.MeshLambertMaterial({color:0x2a8fbd}));water.rotation.x=-Math.PI/2;water.position.y=-.9;scene.add(water);
+let drought=0,chT=0;
+function flow(){wet.fill(0);dist.fill(-1);const q=[],lim=drought>0?22:999;for(let x=0;x<G;x++){const i=I(x,0);if(type[i]==1){wet[i]=1;dist[i]=0;q.push(i)}}
+ for(let h=0;h<q.length;h++){const i=q[h];if(type[i]==3||dist[i]>=lim)continue;const x=i%G,z=fi(i/G);for(const[a,b]of D4){if(!ok(x+a,z+b))continue;const j=I(x+a,z+b);if(wet[j]||(type[j]!=1&&type[j]!=2&&type[j]!=3))continue;wet[j]=1;dist[j]=dist[i]+1;q.push(j)}}chT=gt}
+const near=(i,r)=>{const x=i%G,z=fi(i/G);for(let a=-r;a<=r;a++)for(let b=-r;b<=r;b++)if(ok(x+a,z+b)){const j=I(x+a,z+b);if((type[j]==1||type[j]==2)&&wa[j]>.6)return true}return false};
+const smul=i=>type[i]==4||br[i]?1.7:(type[i]==1||type[i]==2)?.5:1;
+function mkBridge(i){const g=new THREE.Group();g.position.set(cw(i%G),.3,cw(fi(i/G)));g.add(box(CS,.18,CS*.8,0x9a6b3a));[-1,1].forEach(q=>g.add(at(box(CS,.5,.1,0x6b4423),0,.35,q*CS*.4)));scene.add(g);g.scale.setScalar(.01);anim(.8,k=>g.scale.setScalar(Math.max(.01,k)))}
+// деревья, камни
+const res=new Map(),home=[rc(8)+7,8],HX=cw(home[0]),HZ=cw(home[1]);
+const mt=()=>new THREE.MeshLambertMaterial(),dm2=new THREE.Object3D(),IMS={FOL:new THREE.InstancedMesh(new THREE.ConeGeometry(1,1.7,7),mt(),2200),CAN:new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1,1),mt(),2200),TRK:new THREE.InstancedMesh(new THREE.CylinderGeometry(.14,.2,1,6),mt(),2200),ROC:new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1),mt(),400)},CNTI={FOL:0,CAN:0,TRK:0,ROC:0},LEAVES=[];
+for(const k in IMS){IMS[k].frustumCulled=false;IMS[k].setColorAt(0,cc.setHex(0xffffff));IMS[k].instanceColor.needsUpdate=true;IMS[k].count=0;scene.add(IMS[k])}
+function mkTreeObj(x,y,z){const o={position:{x,y,z},parts:[],s:1,scale:{setScalar(v){o.s=v;o.apply()}},apply(){o.parts.forEach(([k,idx,ox,oy,oz,sx,sy,sz,rot])=>{dm2.position.set(o.position.x+ox*o.s,o.position.y+oy*o.s,o.position.z+oz*o.s);dm2.rotation.set(0,rot,0);dm2.scale.set(sx*o.s,sy*o.s,sz*o.s);dm2.updateMatrix();IMS[k].setMatrixAt(idx,dm2.matrix)});for(const k in IMS)IMS[k].instanceMatrix.needsUpdate=true}};return o}
+function part(o,k,ox,oy,oz,sx,sy,sz,hex,lf){if(CNTI[k]>=IMS[k].instanceMatrix.count-2)return;const idx=CNTI[k]++;IMS[k].count=CNTI[k];o.parts.push([k,idx,ox,oy,oz,sx,sy,sz,R()*6.28]);IMS[k].setColorAt(idx,cc.setHex(hex));IMS[k].instanceColor.needsUpdate=true;if(lf)LEAVES.push({k,idx,hex,lf})}
+function tree(o,b,ox,oz,h){const GR=[0x2fb34a,0x3cc45a,0x28a043,0x5fcf4a],PK=[0xff9ecf,0xffc2e2,0xff7ab8];
+ if(b==1){if(R()<.65){part(o,'TRK',ox,1.1*h,oz,2.2,2.2*h,2.2,0x3fa34d);part(o,'TRK',ox+.35,1.5*h,oz,1.2,.9*h,1.2,0x3fa34d);part(o,'TRK',ox-.35,1.2*h,oz,1.2,.7*h,1.2,0x3fa34d)}else{part(o,'TRK',ox,1.6*h,oz,1.2,3.2*h,1.2,0x9a7a4a);for(let j=0;j<3;j++)part(o,'CAN',ox+Math.cos(j*2.1)*.7,3.3*h,oz+Math.sin(j*2.1)*.7,.8,.18,.45,0x2fbf4a)}}
+ else if(b==3){part(o,'TRK',ox,.6*h,oz,1.6,1.2*h,1.6,0xeee3c8);part(o,'CAN',ox,1.3*h,oz,.95*h,.55*h,.95*h,rr([0xff4466,0xb06fe0,0xff9e3d]))}
+ else if(b==4){part(o,'TRK',ox,.8*h,oz,1.3,1.6*h,1.3,0x6b4423);for(let j=0;j<3;j++)part(o,'CAN',ox+(j-1)*.4,(1.9+j*.2)*h,oz+(j%2)*.4,.9*h,.75*h,.9*h,rr(PK),1)}
+ else if(b==2||b==5||R()<.45){const gc=b==2?0x1d6b55:b==5?0x164d33:0x1f8a46;part(o,'TRK',ox,.5*h,oz,1,1*h,1,0x5b3a1e);for(let j=0;j<3;j++)part(o,'FOL',ox,(1.2+j*.65)*h,oz,(1.5-j*.35)*h,(1.2-j*.1)*h,(1.5-j*.35)*h,j==2&&b==2?0xffffff:gc,2)}
+ else{part(o,'TRK',ox,.8*h,oz,1.3,1.6*h,1.3,0x6b4423);for(let j=0;j<3;j++)part(o,'CAN',ox+(R()-.5)*.8,(1.8+j*.35)*h,oz+(R()-.5)*.8,(1.1-j*.15)*h,(.9-j*.1)*h,(1.1-j*.15)*h,rr(GR),1)}}
+function addRes(i,k){const b=bio(i%G,fi(i/G)),o=mkTreeObj(cw(i%G),gh(i),cw(fi(i/G)));
+ if(k=='r'){const c=[0x8d8d8d,0xe0a060,0xaee6ff,0x557766,0xaaaaaa,0x6a6a6a,0x3a3038][b];part(o,'ROC',0,.4,0,.9+R()*.5,.6+R()*.4,.9+R()*.5,c);part(o,'ROC',1,.25,.5,.5,.4,.5,c)}
+ else{const n=1+fi(R()*2);for(let j=0;j<n;j++)tree(o,b,(R()-.5)*2.2,(R()-.5)*2.2,.8+R()*.7)}
+ o.apply();res.set(i,{m:o,k,r:null,hp:k=='r'?3+fi(R()*3):1})}
+const near0=(x,z,cx,cz,r)=>Math.abs(x-cx)<r&&Math.abs(z-cz)<r;
+for(let x=1;x<G-1;x++)for(let z=1;z<G-1;z++){const i=I(x,z);if(type[i]||res.has(i)||near0(x,z,home[0],home[1],4)||near0(x,z,rc(31)-5,31,6)||near0(x,z,33,10,4)||near0(x,z,35,22,3)||near0(x,z,38,26,4)||near0(x,z,home[0]-3,home[1]-5,2)||near0(x,z,14,46,6)||near0(x,z,28,46,9)||near0(x,z,33,10,4))continue;
+ const f=Math.sin(x*.55+1.3)*Math.sin(z*.5+.7)+Math.sin(x*.2+z*.3)*.8,b=bio(x,z);
+ if(b==1){if(R()<.1)addRes(i,R()<.7?'t':'r')}else if(b==6){if(R()<.14)addRes(i,'r')}else if(b==5){if(R()<.8)addRes(i,'t');else if(R()<.04)addRes(i,'r')}else if(f>.45&&R()<.8)addRes(i,'t');else if(R()<.03)addRes(i,'t');else if(R()<.03)addRes(i,'r')}
+// растения и грядки
+const plots=new Map();
+function mkPlot(i,n){type[i]=5;upd(i);const g=new THREE.Group();g.position.set(cw(i%G),gh(i),cw(fi(i/G)));const st=[];for(let a=-1;a<2;a++)for(let b=-1;b<2;b++){const s=box(.13,1,.13,0x5fbf3a);s.geometry.translate(0,.5,0);s.position.set(a*.8+(R()-.5)*.2,0,b*.8+(R()-.5)*.2);s.scale.y=.01;const ear=box(.2,.36,.2,0xe9c24a);ear.position.y=1;ear.visible=false;s.add(ear);s.userData.ear=ear;g.add(s);st.push(s)}scene.add(g);plots.set(i,{i,g:0,sown:n?1:0,m:1,n,st,res:null,gr:g})}
+// ===== состояние =====
+const S={grain:26,seed:12,wood:45,stone:14,coin:40,know:0,cult:0,knights:0},tc={},ideo={id:'c',rl:'sun',cu:'farm'},NB={rel:20,tr:0,dry:0};
+const TECH={writ:['📜 Письменность',12,[],'Открывает Школы: знания растут быстрее'],irr:['💧 Орошение',20,[],'Вода достаёт на 3 клетки, посевы дольше держат влагу'],plow:['🌾 Плуг',25,[],'Урожай +50%'],mason:['🧱 Кладка',30,[],'Дамбы и дороги дешевле'],coin:['🪙 Монета',35,['writ'],'Открывает Рынок и Булочную, доход +50%'],math:['📐 Математика',45,['writ'],'Открывает Лаборатории (×2.5 знаний)'],phil:['🎭 Философия',55,['writ'],'Открывает Храмы, культура ×2'],med:['⚕ Медицина',60,['phil'],'Население растёт вдвое быстрее'],metal:['🔩 Металлургия',50,['mason'],'Открывает Кузницу'],ind:['🏭 Промышленность',90,['metal','math'],'Открывает Мануфактуру'],law:['⚖ Право',40,['writ'],'Суд: советники хуже лгут']};
+const BD={H:{n:'🏠 Дом',w:15,d:'+3 жителя'},K:{n:'🏪 Рынок',w:25,s:5,r:'coin',d:'+4🪙/день'},Z:{n:'🥖 Булочная',w:20,s:10,r:'coin',d:'4🌾→12🪙 в день'},S:{n:'📚 Школа',w:25,s:10,r:'writ',d:'+4📜/день'},L:{n:'🔬 Лаборатория',w:30,s:30,c:30,r:'math',d:'+10📜/день'},T:{n:'⛩ Храм',w:20,s:40,r:'phil',d:'+3🎭/день'},W:{n:'🪚 Лесопилка',w:30,s:10,r:'mason'},Q:{n:'⛏ Каменоломня',w:25,s:5,r:'mason'},F:{n:'🔨 Кузница',w:30,s:25,c:20,r:'metal'},Y:{n:'🌬 Мельница',w:35,s:10,r:'plow'},M:{n:'🏭 Мануфактура',w:50,s:40,c:60,r:'ind'},G:{n:'🗼 Башня',w:20,s:25,r:'mason'},V:{n:'🍺 Таверна',w:30,s:10,c:10,r:'coin'},P:{n:'🏥 Больница',w:30,s:20,c:20,r:'med'},D:{n:'🐄 Скотный двор',w:25,s:5,r:'plow'},B:{n:'🛡 Казарма',w:40,s:40,r:'metal'}};
+for(const k in BD)BD[k].n=TXE(BD[k].n);for(const k in TECH){TECH[k][0]=TXE(TECH[k][0]);TECH[k][3]=TX(TECH[k][3])}
+const blds=new Map(),cnt=k=>[...blds.values()].filter(b=>b.k==k&&!b.n).length,cap=()=>3+cnt('H')*3;
+function houseMesh(g,t,col){const A=(m,x,y,z)=>{g.add(at(m,x,y,z));return m},win=(x,y,z)=>{const w=box(.4,.45,.08,0xffe9a0);w.material.emissive=new THREE.Color(0x8a6a1a);A(w,x,y,z)};
+ if(t==0){A(cyl(.95,1,col||0xc9a66b,10),0,.5,0);A(cone(1.5,1.3,0xd9b45a,10),0,1.6,0);A(box(.45,.8,.08,0x4a2f18),0,.4,.97);win(.6,.7,.8)}
+ else if(t==1){A(box(2.2,1.5,1.8,col||0xf1e4c3),0,.75,0);[-1,0,1].forEach(x=>A(box(.1,1.5,.05,0x6b4423),x*.8,.75,.92));A(box(2.2,.1,.05,0x6b4423),0,1.2,.92);const r1=box(1.5,.12,2.1,0xb5442a),r2=box(1.5,.12,2.1,0xb5442a);r1.rotation.z=.62;r2.rotation.z=-.62;A(r1,-.62,1.95,0);A(r2,.62,1.95,0);A(box(.35,.9,.35,0x777777),.7,2.2,-.4);A(box(.5,.9,.08,0x4a2f18),0,.45,.93);win(-.7,.9,.93);win(.7,.9,.93)}
+ else{A(box(2.4,2.6,2,col||0xd9d2c6),0,1.3,0);A(box(2.5,.1,2.1,0x8a8478),0,1.3,0);const r=cone(2,1.2,0x7a3b2a,4);r.rotation.y=Math.PI/4;A(r,0,3.2,0);A(box(.4,1,.4,0x666666),.8,3.3,-.5);A(box(.6,1,.08,0x4a2f18),0,.5,1.02);[-.7,.7].forEach(x=>{win(x,.9,1.02);win(x,1.9,1.02)});A(box(2.6,.12,.5,0x8a6a3a),0,1.35,1.2)}}
+function mkB(k,col=0xe8d8b0){const g=new THREE.Group(),A=(m,x,y,z)=>g.add(at(m,x,y,z));
+ if(k=='H')houseMesh(g,col==0xa8c8e8?1:(curEra=='Город'?2:curEra=='Посёлок'?1:0),col==0xa8c8e8?col:0);
+ if(k=='K'){A(box(2.2,.8,1.6,0xe9c46a),0,.4,0);A(box(2.4,.15,1.9,0xe63946),0,1.2,0);A(cyl(.08,1.2,0x553311),-1,.6,.7);A(cyl(.08,1.2,0x553311),1,.6,.7)}
+ if(k=='Z'){A(box(2,1.2,1.8,0xd9a066),0,.6,0);A(cyl(.2,1,0x777777),.7,1.6,0);A(cone(1.5,.7,0x8b3a1a,4),0,1.5,0).rotation.y=Math.PI/4}
+ if(k=='S'){A(box(2.4,1.4,2,0xf1e4c3),0,.7,0);A(box(2.6,.2,2.2,0x3a86ff),0,1.5,0);A(cyl(.03,1.2,0x333333,5),1,2.1,0);A(box(.5,.3,.03,0x3a86ff),1.25,2.5,0)}
+ if(k=='L'){A(box(3,1.6,2.4,0xcfd8e6),0,.8,0);A(sph(.8,0x7ee8fa),0,2.1,0);A(cyl(.25,1.6,0x666666),1.1,2.4,0);A(box(1,.5,.1,0x7ee8fa),0,1,1.22)}
+ if(k=='T'){A(box(2.6,.2,2.6,0xeeeeee),0,.1,0);for(const[x,z]of[[1,1],[-1,1],[1,-1],[-1,-1]])A(cyl(.2,1.8,0xffffff),x,1.1,z);A(sph(1.1,0xffd700),0,2.4,0)}
+ if(k=='C'){A(box(3.4,1.6,2.8,0xd2b48c),0,.8,0);A(cone(2.7,1.4,0x8b5a2b,4),0,2.3,0).rotation.y=Math.PI/4}
+ if(k=='W'){A(box(2.2,1,1.6,0xb08850),0,.5,0);for(let j=0;j<3;j++){const lg=cyl(.18,1.6,0x7a5230);lg.rotation.z=1.5;A(lg,0,.25+j*.3,-1.2)}}
+ if(k=='Q'){A(box(2.4,.3,2.4,0x8d8d8d),0,.15,0);A(M(new THREE.DodecahedronGeometry(.7),0xaaaaaa),-.6,.7,.2);A(M(new THREE.DodecahedronGeometry(.6),0x777777),.7,.6,-.3);A(cyl(.05,1.4,0x553311),.2,.9,.9)}
+ if(k=='F'){A(box(2,1.2,1.8,0x5a4a42),0,.6,0);A(cyl(.25,1.2,0x333333),.7,1.8,0);const e=box(.6,.5,.1,0xff6a00);e.material.emissive=new THREE.Color(0xff4400);A(e,0,.6,.95)}
+ if(k=='Y'){A(cone(1.2,3,0xf1e4c3,8),0,1.5,0);A(cone(1.4,.8,0xb5442a,8),0,3.2,0);for(let j=0;j<4;j++){const b2=box(.25,2.4,.06,0xffffff);b2.geometry.translate(0,1.2,0);b2.rotation.z=j*Math.PI/2+.3;A(b2,0,2.6,1.3)}}
+ if(k=='M'){A(box(3,1.6,2.2,0x6a6a78),0,.8,0);A(cyl(.3,3,0x444444),-.9,2.2,0);A(cyl(.3,3.4,0x444444),.9,2.4,0);A(box(2.6,.3,1.8,0x884433),0,1.75,0)}
+ if(k=='V'){A(box(2.4,1.4,1.8,0x8b5a2b),0,.7,0);const r=cone(2,1,0x5c3d1e,4);r.rotation.y=Math.PI/4;A(r,0,1.9,0);A(box(.7,.45,.05,0xe9c46a),1.4,1.4,.9);A(cyl(.25,.5,0x6b4423,8),-1.4,.25,.9)}
+ if(k=='P'){A(box(2.4,1.6,2,0xf4f4f4),0,.8,0);A(box(.9,.2,.05,0xd62828),0,1.2,1.02);A(box(.2,.9,.05,0xd62828),0,1.2,1.02);A(box(2.6,.15,2.2,0x7a8fa8),0,1.7,0)}
+ if(k=='D'){A(box(2.2,1.2,1.4,0xa83232),-.6,.6,-.6);const r=cone(1.8,.8,0x5c3d1e,4);r.rotation.y=Math.PI/4;A(r,-.6,1.6,-.6);[[0,1],[1.2,1.1],[2,.4]].forEach(([a,b])=>A(box(.7,.4,.3,b>1?0xffffff:0x2a2a2a),a+.2,.5,b+.3))}
+ if(k=='B'){A(box(3,1.2,1.6,0x6a6a78),0,.6,0);A(cone(1.2,.7,0xc1121f,4),0,1.5,0);A(cyl(.04,1.4,0x333333,5),1.4,1.4,.6);A(box(.5,.3,.03,0xc1121f),1.65,2,.6);A(cyl(.15,1,0x8b5a2b,6),-1.3,.5,1.1)}
+ if(k=='G'){A(cyl(.8,3,0x9a9a9a),0,1.5,0);A(cone(1,.9,0xc1121f,8),0,3.4,0);A(box(.5,.3,.03,col||0xffffff),.3,4.1,0)}
+ return g}
+function place(i,k,col,grow=true){const g=mkB(k,col);g.position.set(cw(i%G),gh(i),cw(fi(i/G)));scene.add(g);if(grow){g.scale.setScalar(.01);anim(1.2,t=>g.scale.setScalar(Math.max(.01,t)))}blds.set(i,{k,g});type[i]=6;upd(i)}
+// ===== люди =====
+const vs=[];let night=false;
+function mkV(role,x,z,col,style){const g=new THREE.Group();if((style||role)=='g'){}else g.add(at(cyl(.28,.9,col),0,.45,0),at(sph(.22,0xf2c9a0),0,1.1,0));dress(g,style||role,col);g.position.set(x,gh(I(gx(x),gx(z))),z);scene.add(g);const v={role,x,z,m:g,tx:null,tz:null,w:0,idle:0,camp:campOf(role)};vs.push(v);return v}
+const spawn=(role)=>{const v=mkV(role,HX+(R()-.5)*3,HZ+(R()-.5)*3,role=='f'?0x4aa84a:0x3b82c4);v.m.scale.setScalar(.01);anim(1,t=>v.m.scale.setScalar(Math.max(.01,t)));return v};
+const gy=v=>gh(I(cl(gx(v.x),0,G-1),cl(gx(v.z),0,G-1)));
+const go=(v,i,arr)=>{v.tx=cw(i%G)+(R()-.5);v.tz=cw(fi(i/G))+(R()-.5);v.arr=arr},work=(v,t,fin)=>{v.w=t;v.fin=fin};
+function pick(v){if(festival>gt&&(v.role=='f'||v.role=='w')){v.tx=HX+3+(R()-.5)*5;v.tz=HZ+3+(R()-.5)*5;v.arr=()=>{v.w=1.2};return}
+ if(night){const c=v.camp||[HX,HZ];v.tx=c[0]+(R()-.5)*7;v.tz=c[1]+(R()-.5)*7;v.arr=null;v.idle=4;return}
+ if(v.role=='f'){let b=null,bd=1e9;plots.forEach(p=>{if(p.n||p.res)return;const need=p.sown&&p.g>=1?0:!p.sown&&(S.seed>=1||S.grain>=2)?1:9;if(need==9)return;const d=Math.hypot(cw(p.i%G)-v.x,cw(fi(p.i/G))-v.z)+need*8;if(d<bd){bd=d;b=p}});
+  if(b){b.res=v;go(v,b.i,()=>work(v,1.6,()=>{b.res=null;farm(b)}));return}if(S.grain<popN()*3||S.seed<2){forage(v);return}}
+ else if(v.role=='w'){let b=null,bd=1e9;const wantR=S.stone<S.wood*.5;res.forEach((r,i)=>{if(r.r)return;const d=Math.hypot(r.m.position.x-v.x,r.m.position.z-v.z)+((r.k=='r')==wantR?0:25);if(d<bd){bd=d;b=[r,i]}});
+  if(b){const[r,i]=b;r.r=v;go(v,i,()=>work(v,2,()=>workDone(v,r,i)));return}}
+ const c0=v.camp||null;v.tx=c0?c0[0]+(R()-.5)*14:cl(v.x+(R()-.5)*10,-HW+3,HW-3);v.tz=c0?c0[1]+(R()-.5)*14:cl(v.z+(R()-.5)*10,-HW+3,HW-3);v.arr=null;v.idle=1+R()*3}
+function stepV(v,dt){if(v.w>0){v.w-=dt;v.m.position.y=gy(v)+Math.abs(Math.sin(gt*9))*.18;if(v.w<=0&&v.fin){const f=v.fin;v.fin=null;f()}return}
+ if(v.idle>0&&v.tx==null){v.idle-=dt;return}if(v.tx==null){if(v.role=='x'||v.role=='thief')return;pick(v);return}
+ const dx=v.tx-v.x,dz=v.tz-v.z,d=Math.hypot(dx,dz);if(d<.6){v.tx=null;if(v.arr){const f=v.arr;v.arr=null;f()}else v.idle=v.idle||1;return}
+ const sp=(v.sp||2.6)*smul(I(cl(gx(v.x),0,G-1),cl(gx(v.z),0,G-1)))*dt;v.x+=dx/d*sp;v.z+=dz/d*sp;v.m.rotation.y=Math.atan2(dx,dz);v.m.position.set(v.x,gy(v)+Math.abs(Math.sin(gt*8+v.x))*.1,v.z);walkWear(v.x,v.z,dt)}
+// ===== соседнее государство =====
+const NX=cw(rc(31)-5),NZ=cw(31);
+for(let z=28;z<=33;z++)mkPlot(I(rc(z)-1,z),1);
+[[-8,29],[-8,31],[-8,33],[-6,28],[-6,34]].forEach(([a,b],k)=>place(I(rc(31)+a,b),'H',0xa8c8e8,false));place(I(rc(31)-5,31),'K',0,false);blds.forEach(b=>b.n=1);
+for(let k=0;k<4;k++){const v=mkV('n',NX+(R()-.5)*8,NZ+(R()-.5)*8,0xe9a23b);v.role='n'}
+// старт
+place(I(...home),'C',0,false);fire.position.set(HX+3,2,HZ+3);for(let z=7;z<=9;z++){mkPlot(I(rc(z)+3,z),0)}
+for(let k=0;k<4;k++)spawn(k<2?'f':'w');
+function lbl(t,x,z){const c=document.createElement('canvas');c.width=320;c.height=64;const g=c.getContext('2d');g.fillStyle='rgba(8,18,30,.75)';g.fillRect(0,0,320,64);g.fillStyle='#fff';g.font='bold 21px sans-serif';g.textAlign='center';g.fillText(TXE(t),160,42);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));s.scale.set(8,1.6,1);s.position.set(x,7,z);scene.add(s)}
+lbl('🏘 Наша деревня',HX,HZ);lbl('Ольховая · 🪙 Торговцы',NX,NZ);
+const NCX=cw(33),NCZ=cw(10),NB2={rel:5,tr:0};lbl('⚔ Кочевники · Воины',NCX,NCZ);
+[[-3,-2,0xc8553d],[3,-2,0xd9a066],[-3,3,0xa04030],[3,3,0xe9c46a]].forEach(([a,b,c])=>{const t=cone(1.6,2.4,c,6);t.position.set(NCX+a,gh(I(gx(NCX+a),gx(NCZ+b)))+1.2,NCZ+b);scene.add(t)});scene.add(at(cyl(.06,4,0x553311),NCX,gh(I(33,10))+2,NCZ),at(box(1.2,.7,.05,0xe63946),NCX+.6,gh(I(33,10))+3.6,NCZ));
+for(let k=0;k<3;k++)mkV('k',NCX+(R()-.5)*6,NCZ+(R()-.5)*6,0xb33a2a);
+
+lbl('❄ Ледяные вершины',cw(8),cw(2));lbl('🏜 Пустыня Золотых Дюн',cw(35),cw(18));lbl('🍄 Грибные болота',cw(5),cw(26));lbl('🌸 Сакуровая роща',cw(10),cw(13));lbl('💎 Кристальные руины',cw(35),cw(22));
+
+const CRX=cw(35),CRZ=cw(22),CRY=gh(I(35,22)),CRG=new THREE.Group();CRG.position.set(CRX,CRY,CRZ);for(let k=0;k<6;k++){const a=k*Math.PI/3;CRG.add(at(cyl(.3,2+R()*1.5,0xd8c9a8),Math.cos(a)*4,1.2,Math.sin(a)*4))}
+const cry=M(new THREE.OctahedronGeometry(1.2),0x7ef9ff);cry.material.emissive=new THREE.Color(0x22bbdd);cry.position.y=3.5;CRG.add(cry);scene.add(CRG);const cpl=new THREE.PointLight(0x66ddff,1.3,20);cpl.position.set(CRX,CRY+3,CRZ);scene.add(cpl);let crystalDone=false;
+{const oy=gh(I(38,26));scene.add(at(cyl(3,.15,0x2fd0e8,16),cw(38),oy+.05,cw(26)));for(let k=0;k<5;k++){const a=k*1.26,g=new THREE.Group();g.position.set(cw(38)+Math.cos(a)*3.6,oy,cw(26)+Math.sin(a)*3.6);g.add(at(cyl(.15,2.6,0x8b5a2b),0,1.3,0));for(let j=0;j<4;j++){const l=box(1.6,.08,.4,0x2fbf4a);l.position.set(Math.cos(j*1.57)*.8,2.7,Math.sin(j*1.57)*.8);l.rotation.y=-j*1.57;g.add(l)}scene.add(g)}}
+const WM=new THREE.Group();WM.position.set(cw(home[0]-3),gh(I(home[0]-3,home[1]-5)),cw(home[1]-5));WM.add(at(cone(1.5,3.5,0xf1e4c3,8),0,1.75,0),at(cone(1.7,1,0xb5442a,8),0,3.9,0));const bl=new THREE.Group();bl.position.set(0,3,1.4);for(let k=0;k<4;k++){const b2=box(.3,3,.08,0xffffff);b2.geometry.translate(0,1.5,0);b2.rotation.z=k*Math.PI/2;bl.add(b2)}WM.add(bl);scene.add(WM);
+{const wx=cw(rc(0))+CS/2,c1=box(7,7,4,0xeaf6ff),c2=box(7,5,4,0xcfe8ff);c1.position.set(wx-6.5,3.5,cw(-1));c2.position.set(wx+6.5,2.5,cw(-1));scene.add(c1,c2);const wf=box(CS*2,6,.8,0x8fe0ff);wf.material.transparent=true;wf.material.opacity=.8;wf.material.emissive=new THREE.Color(0x2288cc);wf.position.set(wx,3,cw(-1)+.4);scene.add(wf)}
+const clouds=[];for(let k=0;k<10;k++){const c=new THREE.Group();for(let j=0;j<3;j++){const q=sph(2+R()*1.5,0xffffff);q.material.transparent=true;q.material.opacity=.9;q.position.set(j*2.5,R(),R());q.scale.y=.55;c.add(q)}c.position.set(R()*200-100,24+R()*8,R()*160-80);scene.add(c);clouds.push(c)}
+flow();for(let i=0;i<G*G;i++)if(type[i]==1)wa[i]=1;
+// ===== игрок, ввод =====
+let px=HX-4,pz=HZ+4,yaw=Math.PI*.85,pitch=-.15,mode='walk',sub='H',bird=false,spd=1,jx=0,jz=0,modal=0;const keys={};
+const av=new THREE.Group();av.add(at(cyl(.3,1,0xffd166),0,.5,0),at(sph(.25,0xf2c9a0),0,1.2,0));scene.add(av);
+const kn=$('#kn'),jy=$('#joy');let jid=null;
+jy.onpointerdown=e=>{jid=e.pointerId;jy.setPointerCapture(jid);jm(e)};jy.onpointermove=e=>{if(e.pointerId==jid)jm(e)};jy.onpointerup=()=>{jid=null;jx=jz=0;kn.style.left=kn.style.top='35px'};
+function jm(e){const r=jy.getBoundingClientRect();let a=(e.clientX-r.left-55)/55,b=(e.clientY-r.top-55)/55;const l=Math.hypot(a,b);if(l>1){a/=l;b/=l}jx=a;jz=b;kn.style.left=35+a*35+'px';kn.style.top=35+b*35+'px'}
+addEventListener('keydown',e=>keys[e.code]=1);addEventListener('keyup',e=>keys[e.code]=0);
+const cv=ren.domElement,ray=new THREE.Raycaster(),PL=new THREE.Plane(new THREE.Vector3(0,1,0),-.4);let lp=null,drag=false;
+function cellAt(e){ray.setFromCamera({x:e.clientX/innerWidth*2-1,y:-(e.clientY/innerHeight)*2+1},cam);const p=new THREE.Vector3();if(!ray.ray.intersectPlane(PL,p))return -1;const x=gx(p.x),z=gx(p.z);return ok(x,z)?I(x,z):-1}
+cv.onpointerdown=e=>{if(cinema&&cinema.f)cinema.t=999;lp=[e.clientX,e.clientY];drag=true;if(mode!='walk'&&!inside)edit(cellAt(e),true)};
+cv.onpointermove=e=>{if(!drag)return;if(mode=='walk'){yaw-=(e.clientX-lp[0])*.005;pitch=cl(pitch-(e.clientY-lp[1])*.004*(bird?0:1),-1.2,1.2)}else edit(cellAt(e),false);lp=[e.clientX,e.clientY]};
+cv.onpointerup=()=>drag=false;
+const rich=(c)=>S.wood>=(c.w||0)&&S.stone>=(c.s||0)&&S.coin>=(c.c||0),paid=c=>{S.wood-=c.w||0;S.stone-=c.s||0;S.coin-=c.c||0};
+function edit(i,first){if(i<0||modal||inside)return;const t=type[i],x=i%G,z=fi(i/G);
+ if(mode=='plot'&&t==0&&!res.has(i)){mkPlot(i,0)}
+ else if(mode=='canal'&&t==0&&!res.has(i)){if(S.coin<1)return say('Нужна монета на каждую клетку канала');if(!D4.some(([a,b])=>ok(x+a,z+b)&&[1,2,3].includes(type[I(x+a,z+b)])))return;S.coin--;type[i]=2;orig[i]=2;wa[i]=0;upd(i);flow();fl('💧 копаем',cw(x),cw(z))}
+ else if(mode=='dam'&&first&&(t==1||t==2||t==3)){if(t==3){type[i]=orig[i];upd(i);say('Дамба разобрана — вода пошла дальше');flow()}else{const c=tc.mason?2:5;if(S.stone<c)return say('Нужно '+c+'🪨 на дамбу');S.stone-=c;type[i]=3;upd(i);flow();say('🧱 Дамба! Ниже по течению вода уйдёт')}}
+ else if(mode=='road'&&(t==1||t==2)&&first&&!br[i]){const c=tc.mason?2:4;if(S.wood<c)return say('Нужно '+c+'🪵 на мост');S.wood-=c;br[i]=1;mkBridge(i);say('🌉 Мост построен — по воде идти вдвое медленнее, по мосту быстрее')}
+ else if(mode=='road'&&t==0&&!res.has(i)){const c=tc.mason?0:1;if(S.wood<c)return;S.wood-=c;type[i]=4;upd(i)}
+ else if(mode=='build'&&first&&t==0&&!res.has(i)){const c=cdisc(BD[sub],sub);if(c.r&&!tc[c.r])return say('Сначала изучите: '+TECH[c.r][0]);if(!rich(c))return say('Не хватает ресурсов');paid(c);place(i,sub,0xe8d8b0);say(c.n+' построен');boom(cw(x),cw(z))}
+ else if(first&&t==5&&plots.has(i)&&mode=='plot'){const p=plots.get(i);if(!p.n)farm(p)}}
+// ===== эффекты, окна =====
+function fl(t,X,Z){const v=new THREE.Vector3(X,3,Z).project(cam);if(v.z>1)return;const e=document.createElement('div');e.className='fl';e.textContent=TX(t);e.style.left=(v.x+1)/2*innerWidth+(R()-.5)*40+'px';e.style.top=(1-v.y)/2*innerHeight+'px';document.body.appendChild(e);setTimeout(()=>e.remove(),1800)}
+function boom(x,z){const ps=[];for(let i=0;i<14;i++){const m=sph(.15,0xe0c070);m.position.set(x,1,z);m.v=[(R()-.5)*5,R()*4+2,(R()-.5)*5];scene.add(m);ps.push(m)}anim(.9,k=>{ps.forEach(m=>{m.position.set(x+m.v[0]*k,1+m.v[1]*k-5*k*k,z+m.v[2]*k);m.scale.setScalar(Math.max(.01,1-k))});if(k>=1)ps.forEach(m=>scene.remove(m))})}
+async function ban(t,d='',ms=1700){const e=$('#ban');e.innerHTML=TX(t)+(d?`<small>${TX(d)}</small>`:'');e.className='show';await wait(ms);e.className=''}
+const LG=[];function say(t){LG.push(TX(t));$('#log').innerHTML=LG.slice(-4).join('<br>')}
+function ask(t,d,o){return new Promise(r=>{modal++;const e=$('#ev');e.innerHTML=`<div><h2>${TX(t)}</h2><p>${TX(d)}</p>${o.map((x,i)=>`<button data-i="${i}" class="${x[3]||''}" ${x[2]&&!x[2]()?'disabled':''}>${TX(x[0])}</button>`).join('')}</div>`;e.style.display='flex';
+ e.onclick=ev=>{const b=ev.target.closest('button');if(!b||b.disabled)return;const k=+b.dataset.i;if(o[k][1]&&o[k][1]()==='keep')return;e.style.display='none';modal--;r(k)}})}
+// ===== время, дни, события =====
+const hour=()=>(gt/DL*24+6)%24,era=()=>cnt('L')&&popN()>=16?'Город':cnt('S')&&popN()>=8?'Посёлок':'Деревня';let curEra='Деревня',evAt=3,day=1,rain=0;
+function dayTick(){day++;const ns=fi((day-1)/3)%4;let sch=false;if(ns!=season){sch=true;season=ns;for(let i=0;i<G*G;i++)if(!type[i])paint(i);im.instanceColor.needsUpdate=true;seasonTrees(ns);grassDirty=true;ban(['🌱 Весна','☀ Лето','🍂 Осень','❄ Зима'][ns],['Рост ускоряется','Жарко: риск засухи','Урожаи богаче на 25%','Поля спят, жителям нужно на 50% больше еды — копите зерно!'][ns],2800);say('Сезон: '+['весна','лето','осень','зима'][ns])}const pop=vs.filter(v=>v.role=='f'||v.role=='w').length;dayExtra(pop);saveGame();S.grain-=pop*(season==3?1.5:1);
+ if(S.grain<0){S.grain=0;hungry++;if(hungry>=2){const v=vs.find(v=>v.role=='w'||v.role=='f');if(v&&pop>2){vs.splice(vs.indexOf(v),1);anim(1,t=>v.m.scale.setScalar(Math.max(.01,1-t))).then(()=>scene.remove(v.m));say('☠ Голод — житель ушёл из деревни')}}else say('⚠ Зерно кончилось! Продайте камень или дерево и купите еды (🤝 у рынка)')}else hungry=0;
+ if(S.grain<=0&&day-lastAid>=3&&NB.rel>=10){S.grain+=15;lastAid=day;say('🤝 Соседи прислали 15🌾 помощи')}
+ const mk=cnt('K'),bk=cnt('Z'),I2=ideo.id=='t'?1.5:1,cm=tc.coin?1.5:1;S.coin+=(pop*.3+mk*4*I2*cm)*ab(1,1.2)*rb('coin')+(NB.tr+NB2.tr+NB3.tr+NB4.tr)*8;if(S.grain>=4*bk){S.grain-=4*bk;S.coin+=12*bk*cm}
+ S.know+=(2+cnt('S')*4*(tc.writ?1.2:1)+cnt('L')*10)*(ideo.id=='f'?.8:1)*ab(0,1.2)*rb('know');S.cult+=(cnt('T')*3*(tc.phil?2:1)+cnt('S'))*(ideo.id=='f'?2:1);
+ if(S.grain>pop*2.5&&pop<cap()&&vs.filter(v=>v.role=='f'||v.role=='w').length<cap()){const v=spawn(vs.filter(v=>v.role=='f').length<=vs.filter(v=>v.role=='w').length?'f':'w');say('👶 В деревне новый житель')}
+ if(tc.med&&S.grain>pop*3&&pop<cap())spawn('w');
+ const np=[...plots.values()].filter(p=>p.n),dry=np.filter(p=>p.m<=.05).length/np.length;NB.dry=dry;if(dry>.4){NB.rel-=NB.oath?12:6;say('😠 У Ольховой высыхают поля! Отношения падают')}else NB.rel=Math.min(100,NB.rel+1);
+ if(NB.rel<-40&&R()<.5){const st=Math.min(S.grain,Math.ceil(S.grain*.3));S.grain-=st;say('🗡 Налётчики из Ольховой украли '+st+'🌾');ban('🗡 Набег!','Они украли часть зерна',1600)}
+ const e=era();if(e!=curEra){curEra=e;upgradeH();ban(TX('🏙 Новая эра')+': '+TX(e),'',2200)}else if(!sch)ban('☀ День '+day,'',900);
+ if(curEra=='Город'&&NB.rel>=40&&!over){over=true;$('#fin h1').textContent='🏆 Золотой век';$('#fin p').textContent='Из маленькой деревни вы вырастили город с лабораториями и дружите с соседями.';$('#fin').style.display='flex'}
+ if(day>=evAt&&!modal){evAt=day+2+fi(R()*2);event()}
+ if(day==5)setTimeout(messenger,1800);}
+let over=false;const queue=f=>f();
+function event(){const o=rr([...(season==1?['dr','dr','car','env','find']:season==0?['rain','rain','car','env','find']:['dr','rain','car','car','env','find']),'fest','fest']);
+ if(o=='dr'){drought=DL*1.3;flow();ban('☀ Засуха','Река мелеет — вода доходит не так далеко',2200);say('☀ Засуха! Прокопайте канал и держите поля у реки')}
+ else if(o=='rain'){rain=DL*.6;ban('🌧 Ливень','Поля растут вдвое быстрее',2000)}
+ else if(o=='car'){const v=mkV('x',cw(2),cw(rc(8)+9),0xb06fe0);v.m.scale.setScalar(1.4);go(v,I(home[0]-1,home[1]),()=>{v.w=1;v.fin=()=>ask('🛒 Караван торговцев','Странствующий купец предлагает сделку.',[['Продать 15🌾 за 50🪙',()=>{S.grain-=15;S.coin+=50},()=>S.grain>=15],['Купить 8🪨 за 24🪙',()=>{S.coin-=24;S.stone+=8},()=>S.coin>=24],['Отказать']]).then(()=>{v.tx=cw(0);v.tz=cw(36);v.arr=()=>{scene.remove(v.m);vs.splice(vs.indexOf(v),1)}})})}
+ else if(o=='fest')ask('🎉 Праздник урожая','Жители просят устроить праздник у костра — музыка, танцы, фейерверки.',[['Устроить: −20🪙, +10🎭, советники довольны',()=>{S.coin-=20;S.cult+=10;festival=gt+14;fx(HX+3,HZ+3,0xffd23f,30,7);ADV.forEach(a=>a.loy=Math.min(100,a.loy+6))},()=>S.coin>=20],['Отказать (советники ропщут)',()=>ADV.forEach(a=>a.loy-=5)]]);
+ else if(o=='find'){for(let k=0;k<4;k++){const i=I(home[0]+fi(R()*8)-4,home[1]+fi(R()*8)-4);if(!type[i]&&!res.has(i))addRes(i,'r')}say('💎 Рядом нашли залежи камня!')}
+ else if(o=='env'){if(NB.dry>.3)ask('🕊 Посол Ольховой','«Ваша дамба иссушила наши поля. Откройте воду — или будет беда!»',[['Разобрать все дамбы',()=>{for(let i=0;i<G*G;i++)if(type[i]==3)type[i]=orig[i],upd(i);flow();NB.rel+=15}],['Подарить 10🌾',()=>{S.grain-=10;NB.rel+=8},()=>S.grain>=10],['Отказать',()=>NB.rel-=15]]);else say('🕊 Посол Ольховой желает вам процветания')}}
+// ===== интерфейс =====
+const hx=()=>{};
+function sheet(kind){let h='';
+ if(kind=='tech')h=Object.keys(TECH).map(k=>{const T=TECH[k],okp=T[2].every(r=>tc[r]);return `<button data-k="${k}" class="${tc[k]?'on':''}" ${tc[k]||!okp||S.know<T[1]?'disabled':''}>${tc[k]?'✅ ':okp?'':'🔒 '}${T[0]} — ${T[1]}📜<small>${T[3]}${okp?'':' · нужно: '+T[2].map(r=>TECH[r][0]).join(', ')}</small></button>`}).join('');
+ const o=[];if(kind=='tech'){ask('🔬 Наука · у вас '+fi(S.know)+'📜','Знания дают Школы и Лаборатории. Каждая технология открывает здания и бонусы.',[]);const e=$('#ev');e.querySelector('div').insertAdjacentHTML('beforeend',h+'<button id="x">Закрыть</button>');e.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.id=='x'||!b.dataset.k){e.style.display='none';modal--;ui();return}const k=b.dataset.k;S.know-=TECH[k][1];tc[k]=1;say('🔬 Изучено: '+TECH[k][0]);e.style.display='none';modal--;ban('🔬 Открытие!',TECH[k][0]);ui()}}
+ if(kind=='adv'){ask('🗂 Досье двора','Подозрения копятся из слухов 🔎 и улик 📌. Обвинять без улик опасно — можно погубить невиновного.',[]);const e=$('#ev');e.querySelector('div').insertAdjacentHTML('beforeend',ADV.map(a=>`<button disabled style="opacity:1"><b>${a.r} ${a.n}</b> · плащ ${a.col}<small>${a.gone?'покинул двор':'Верность: '+(a.loy>70?'крепкая':a.loy>45?'шаткая':'на грани')+' · 🔎'+a.sus+' · 📌'+a.cl}</small></button>`).join('')+'<button id="x">Закрыть</button><p style="margin-top:8px"><small>🪙 Ольховая: торговцы — любят мосты и воду.<br>⚔ Кочевники: воины — уважают башни и дары.</small></p>');e.onclick=ev=>{const b=ev.target.closest('button');if(b&&b.id=='x'){e.style.display='none';modal--;ui()}}}
+ if(kind=='pol'){ask('🏛 Политика','Идеология задаёт путь развития. Культура: '+fi(S.cult)+'🎭 · Отношения с Ольховой: '+fi(NB.rel),[]);const e=$('#ev');e.querySelector('div').insertAdjacentHTML('beforeend',[['c','🌾 Община','Урожай +25%'],['t','🪙 Торговля','Рынки +50% дохода'],['f','⛪ Вера','Культура ×2, знания −20%']].map(([k,n,d])=>`<button data-k="${k}" class="${ideo.id==k?'on':''}">${n}<small>${d}</small></button>`).join('')+'<button id="x">Закрыть</button>');e.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.k)ideo.id=b.dataset.k;e.style.display='none';modal--;ui()}}}
+function ui(){const tp=vs.filter(v=>v.role=='f'||v.role=='w').length,h=hour(),hh=fi(h),mm=fi((h-hh)*60);
+ const rt=rates(),dl=dayLbl(day);$('#top').innerHTML=`<div class="r"><b>${dl} · ${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}${night?' 🌙':' ☀'} ${['🌱','☀','🍂','❄'][season]}</b><span>${TX(curEra)} · 👥${tp}/${cap()}${rain>0?' 🌧':''}${drought>0?' 🔥':''}</span></div><div class="r"><span>🌾${fi(S.grain)}<i style="color:#ff9b7b">−${fi(rt.eat)}</i></span><span>🌱${fi(S.seed)}</span><span>🪵${fi(S.wood)}</span><span>🪨${fi(S.stone)}</span><span>🪙${fi(S.coin)}<i style="color:#9be37a">+${rt.coin.toFixed(1)}</i></span><span>📜${fi(S.know)}</span></div><div class="q">${tip()}</div>`;
+ const B=(m,t,x)=>`<button data-m="${m}" class="${mode==m?'on':''}">${t}</button>`;
+ $('#mn').innerHTML=B('walk','👁 '+TX('Ходить'))+B('plot','🌱 '+TX('Грядки'))+B('canal','💧 '+TX('Канал'))+B('dam','🧱 '+TX('Дамба'))+B('road','🛤 '+TX('Дорога'))+B('build','🏠 '+TX('Здания'))+`<button data-m="tech">🔬</button><button data-m="pol">🏛</button><button data-m="adv">🗂</button><button data-m="bird" class="${bird?'on':''}">🦅</button><button data-m="spd" class="${spd>1?'on':''}">⏩</button><button data-m="menu">☰</button>`;
+ const sb=$('#sub');sb.style.display=mode=='build'?'flex':'none';sb.innerHTML=Object.keys(BD).map(k=>{const c=cdisc(BD[k],k),lk=c.r&&!tc[c.r];return `<button data-s="${k}" class="${sub==k?'on':''}" ${lk?'disabled':''}>${lk?'🔒':''}${c.n} ${c.w?c.w+'🪵':''}${c.s?c.s+'🪨':''}${c.c?c.c+'🪙':''}</button>`}).join('')}
+function tip0(){const rt=rates(),np=[...plots.values()].filter(p=>!p.n),dr=np.filter(p=>p.sown&&p.m<.2).length,days=rt.eat>0?fi(S.grain/rt.eat):99;
+ if(dr)return'💧 Грядки сохнут! Прокопайте канал от реки (🌱 рядом с водой).';
+ if(days<3)return'🌾 Зерна на '+days+' дн. Продайте дерево или камень на рынке и купите зерно.';
+ if(S.seed<2&&np.some(p=>!p.sown))return'🌱 Мало семян: купите на рынке или дождитесь колосьев.';
+ if(S.coin<20&&(S.wood>60||S.stone>30))return'🪙 Мало монет: продайте лишний камень или дерево (🤝 у рынка).';
+ if(popN()>=cap())return'🏠 Нет места для новых жителей — стройте дома.';
+ if(S.know>=12&&!tc.writ)return'🔬 Хватает знаний на Письменность!';
+ if(!cnt('S')&&tc.writ)return'📚 Постройте Школу — она даёт знания.';
+ if(NB.dry>.3)return'⚠ Соседи страдают от засухи: вы перекрыли им воду.';
+ return'💡 Река течёт с севера. Дамба блокирует воду ниже — канал выше дамбы орошает ваши поля.'}
+const tip=()=>TX(tip0());
+$('#mn').onclick=e=>{const b=e.target.closest('button');if(!b||modal)return;const m=b.dataset.m;if(m=='menu')return pauseMenu();if(m=='tech'||m=='pol'||m=='adv')return sheet(m);if(m=='bird')bird=!bird;else if(m=='spd')spd=spd>1?1:4;else mode=m;ui()};
+$('#sub').onclick=e=>{const b=e.target.closest('button');if(b&&b.dataset.s){sub=b.dataset.s;ui()}};
+const trd=$('#trade'),setT=h=>{if(trd._h!==h){trd._h=h;trd.innerHTML=h}};trd.onclick=e=>{const b=e.target.closest('button');if(!b)return;const a=b.dataset.a,pr=NB.dry>.3?4:2.5;
+ if(a=='sell'&&S.grain>=10){S.grain-=10;S.coin+=Math.round(10*pr*(NB.rel>30?1.2:1));NB.rel+=1}
+ if(a=='buy'&&S.coin>=18){S.coin-=18;S.stone+=5}
+ if(a=='gift'&&S.grain>=10){S.grain-=10;NB.rel+=10;say('🎁 Подарок принят')}
+ if(a=='nsell'&&S.grain>=10){S.grain-=10;S.coin+=30;NB2.rel+=1}if(a=='nbribe'&&S.coin>=25){S.coin-=25;NB2.rel+=12;say('🎁 Кочевники довольны подарком')}if(a=='ncon'&&NB2.rel>=25&&!NB2.tr){NB2.tr=1;say('🤝 Кочевники — союзники: не грабят вас')}
+ if(a=='pact'&&NB.rel>=30&&!NB.tr){NB.tr=1;say('🤝 Торговый договор: +8🪙 в день');ban('🤝 Договор','Ольховая и вы торгуете')}
+ ui()};
+// ===== советники, интриги, интерьеры =====
+const ADV=[{n:'Элвин',r:'📚 Мудрец',c:0x4a7bd8,col:'синем'},{n:'Брунн',r:'💰 Казначей',c:0xd8a42a,col:'золотом'},{n:'Рорик',r:'🛡 Страж',c:0x9a3a3a,col:'багровом'},{n:'Мира',r:'⛪ Жрица',c:0x8e5bd8,col:'фиолетовом'}],NAMES=['Торвин','Иса','Галлен','Лиара','Оскар','Нэйя'];
+ADV.forEach(a=>{a.loy=55+fi(R()*25);a.tr=false;a.sus=0;a.cl=0;a.gone=false});rr(ADV).tr=true;
+const ab=(i,m)=>{const a=ADV[i];return a&&!a.gone&&!a.tr&&a.loy>=30?m:1},anyTr=()=>ADV.filter(a=>a.tr&&!a.gone),popN=()=>vs.filter(v=>v.role=='f'||v.role=='w').length;
+let sabAt=4,raidAt=8,meetNext=false,agent=null,thief=null,sight=null,festival=0,inside=null,outP=null,actH='';
+const fireL=new THREE.PointLight(0xff6600,0,26);scene.add(fireL);
+function fx(x,z,col,n=14,sp=5,y=1.4){const ps=[];for(let i=0;i<n;i++){const m=sph(.15+R()*.1,col);m.position.set(x,y,z);m.v=[(R()-.5)*sp,R()*sp*.8+2,(R()-.5)*sp];scene.add(m);ps.push(m)}anim(1,k=>{ps.forEach(m=>{m.position.set(x+m.v[0]*k,y+m.v[1]*k-5*k*k,z+m.v[2]*k);m.scale.setScalar(Math.max(.01,1-k))});if(k>=1)ps.forEach(m=>scene.remove(m))})}
+function flames(x,z,dur){const ps=[];for(let i=0;i<18;i++){const m=sph(.35,i%2?0xff7a00:0xffd23f);m.material.transparent=true;scene.add(m);ps.push(m)}fireL.position.set(x,2,z);anim(dur,k=>{ps.forEach((m,i)=>{const q=(k*dur*1.2+i/18)%1;m.position.set(x+Math.sin(i*3)*1.4,.5+q*3,z+Math.cos(i*5)*1.4);m.scale.setScalar(1-q*.8);m.material.opacity=1-q});fireL.intensity=1.6+Math.sin(k*60)*.6;if(k>=1){ps.forEach(m=>scene.remove(m));fireL.intensity=0}})}
+function spawnThief(t){const v=mkV('thief',HX+1,HZ+2,t.c);v.sp=4.2;thief={v,t};S.coin=Math.max(0,S.coin-40);ban('🏃 Вор!','Кто-то в плаще унёс 40🪙 — догоните его (метка на карте)!',2800);const ex=rr([[2,G-3],[G-3,G-3],[G-3,2]]);go(v,I(ex[0],ex[1]),()=>{scene.remove(v.m);vs.splice(vs.indexOf(v),1);thief=null;say('Вор скрылся с золотом…')})}
+function sabotage(){const t=rr(anyTr());if(!t)return;const o=rr(['fire','dam','thief','leak','fire','thief']);
+ if(o=='fire'){cine(HX+2,HZ-2,9,3.6);ban('🔥 Пожар в амбаре!','Огонь вспыхнул среди ночи — кто-то поджёг склад',2400);flames(HX+2,HZ-2,10);S.grain*=.75;say('🔥 Сгорела часть зерна')}
+ else if(o=='dam'){const d=[];for(let i=0;i<G*G;i++)if(type[i]==3)d.push(i);if(d.length){const i=rr(d);type[i]=orig[i];upd(i);flow();cine(cw(i%G),cw(fi(i/G)),10,3.4);fx(cw(i%G),cw(fi(i/G)),0x4aa8ff,36,9);ban('💥 Дамба взорвана!','Вода хлынула вниз по течению',2400);say('💥 Кто-то взорвал дамбу')}else{S.grain*=.85;fx(HX,HZ,0x66aa44,22,4);ban('☠ Зерно отравлено','В амбаре нашли плесень',2200)}}
+ else if(o=='thief')spawnThief(t);
+ else{NB.rel-=10;ask('🕊 Посол Ольховой','«Наш посол слышал ваши тайны в чужих устах. Кто-то из вашего двора болтлив…»',[['Разберусь']])}}
+function raid(){cine(HX,HZ,11,3.2);ban('⚔ Налёт кочевников!','С востока скачут всадники',2400);for(let k=0;k<4;k++){const v=mkV('x',NCX+(R()-.5)*3,NCZ+(R()-.5)*3,0xb33a2a);v.sp=4;go(v,I(home[0]+(k%2?2:-2),home[1]+2),()=>{v.w=1.2;v.fin=()=>{if(k==0){const st=Math.floor(S.grain*.3*Math.max(.2,1-.3*cnt('G'))*(ideo.cu=='war'?.7:1)*Math.max(.2,1-.25*S.knights)*(NB4.tr?.5:1));S.grain-=st;fl('−'+st+'🌾',HX,HZ);fx(HX,HZ,0xe9c46a,20,6);say('⚔ Кочевники унесли '+st+'🌾')}go(v,I(gx(NCX),gx(NCZ)),()=>{scene.remove(v.m);vs.splice(vs.indexOf(v),1)})}})}}
+function partnerTick(){PT.forEach(p=>{if(ideo.rl==p.rid)p.o.rel=Math.min(100,p.o.rel+.5)});NB3.rel=cl(NB3.rel-Math.min(2,chopped*.06)+(ideo.rl=='forest'?.3:0)+.1,-100,100);chopped=Math.max(0,chopped-4);NB4.rel=cl(NB4.rel+(S.knights?.5:.1),-100,100)}
+function dayExtra(pop){regrowTick();industryTick();partnerTick();const mf=cnt('M');if(mf&&S.wood>=6*mf){S.wood-=6*mf;S.coin+=25*mf}
+ let bc=0;for(let i=0;i<G*G;i++)bc+=br[i];NB.rel=Math.min(100,NB.rel+Math.min(3,bc)*.5);
+ const tw=cnt('G');NB2.rel=cl(NB2.rel+(NB2.tr?1:tw?Math.min(3,tw)*.7:-.8),-100,100);
+ ADV.forEach(a=>{if(a.gone)return;a.loy-=ideo.rl=='anc'?.3:.6;if(!a.tr&&a.loy<8){a.gone=true;say('🚪 '+a.n+' покинул двор, обиженный');setTimeout(()=>ban('🚪 '+a.n+' ушёл','Обиженный советник покинул Ратушу',2200),1500)}});
+ if(day>6&&R()<.3){const c=ADV.filter(a=>!a.gone&&!a.tr).sort((a,b)=>a.loy-b.loy)[0];if(c&&c.loy<50&&R()<.7)c.tr=true}
+ if(anyTr().length&&day>=3&&R()<.45)meetNext=true;
+ if(anyTr().length&&day>=sabAt){sabAt=day+2+fi(R()*3);setTimeout(()=>{if(!modal&&!over)sabotage()},1600)}
+ if(NB2.rel<-5&&day>=raidAt){raidAt=day+3;setTimeout(()=>{if(!modal&&!over)raid()},1600)}}
+function startMeet(t){meetNext=false;const M=[cw(rc(17)+5),cw(17)],ag=mkV('x',HX,HZ+2,t.c),en=mkV('x',M[0]+1.2,M[1]+.5,0xe9a23b);ag.m.add(at(sph(.27,0x1a1a1a),0,1.15,0));agent={v:ag,t,en,atMeet:false,n:0};
+ go(ag,I(gx(M[0]),gx(M[1])),()=>{if(agent)agent.atMeet=true;ag.w=14;ag.fin=()=>{go(ag,I(home[0],home[1]),()=>{scene.remove(ag.m);vs.splice(vs.indexOf(ag),1);scene.remove(en.m);vs.splice(vs.indexOf(en),1);agent=null;sight=t})}})}
+function eaves(a){ask('🌙 Подслушанный разговор','Вы замираете в тени. Двое шепчутся: «— Дамбу вскроем, когда сойдёт луна. — А мои монеты? — Как условились…» На одном — плащ в '+a.t.col+' цвете.',[['Остаться в тени (+улика)',()=>{a.t.cl++}],['Выйти и схватить (риск)',()=>{if(R()<.5){a.t.cl+=2;S.coin+=15;fx(a.v.x,a.v.z,0xffd23f,14,5)}else{S.coin=Math.max(0,S.coin-15);fx(a.v.x,a.v.z,0x555555,14,5)}}]])}
+// --- интерьеры
+const room=new THREE.Group();room.position.y=300;room.visible=false;scene.add(room);const rl=new THREE.PointLight(0xffe0b0,1.2,34);rl.position.set(0,4.5,0);room.add(rl);let npcs=[];
+function npc(x,z,c,name,fn,tw=1){const g=new THREE.Group();g.add(at(cone(.5,1.4,c,8),0,.7,0),at(sph(.26,0xf2c9a0),0,1.55,0));g.position.set(x,.1,z);g.userData.tw=tw;room.add(g);npcs.push({g,x,z,name,fn})}
+const ENT={C:'Ратуша',S:'Школа',L:'Лаборатория',T:'Храм',K:'Рынок'},one=(n,t)=>ask(n,t,[['Понятно']]);
+const FN={S:()=>ask('📚 Учитель','«Знание — это свет. Хотите позаниматься?»',[['Учиться: −10🪙, +8📜',()=>{S.coin-=10;S.know+=8},()=>S.coin>=10],['Уйти']]),
+ T:()=>ask('⛩ Жрица храма','«Мир вам, странник. Здесь можно найти покой.»',[['Помолиться: +5🎭, советники теплее',()=>{S.cult+=5;ADV.forEach(a=>a.loy=Math.min(100,a.loy+2))}],['Пожертвовать 10🪙: +12🎭',()=>{S.coin-=10;S.cult+=12},()=>S.coin>=10],['Уйти']]),
+ L:()=>ask('🔬 Алхимик','«Эксперимент? Может выйти красиво… или громко.»',[['Провести опыт (−20🪙)',()=>{S.coin-=20;const r=R();if(r<.6){S.know+=25;say('🧪 Опыт удался: +25📜');fx(0,0,0x7ef9ff,30,6,302)}else if(r<.85){S.wood=Math.max(0,S.wood-15);say('💥 Взрыв в лаборатории! −15🪵');fx(0,0,0xff8c1a,40,9,302)}else{const a=Object.keys(TECH).filter(k=>!tc[k]&&TECH[k][2].every(q=>tc[q]));if(a.length){const k=rr(a);tc[k]=1;say('✨ Озарение! Открыта технология '+TECH[k][0])}}},()=>S.coin>=20],['Уйти']]),
+ K:()=>ask('🏪 Торговец','«Лучшие цены во всей долине!»',[['Продать 10🌾 → +28🪙',()=>{S.grain-=10;S.coin+=28},()=>S.grain>=10],['Купить 5🪨 → −16🪙',()=>{S.coin-=16;S.stone+=5},()=>S.coin>=16],['Уйти']])};
+const BAD=['«Разберите все мосты — соседи станут вас уважать».','«Раздайте всё зерно людям — пусть любят вас, амбары не нужны».','«Не стройте школ — знание развращает народ».','«Отдайте камень Ольховой в дар — они ваши друзья навек».','«Налоги не нужны: монеты портят народ».'];
+const GOOD=[()=>S.know>=12&&!tc.writ?'«Изучите Письменность в 🔬 — знания откроют новые здания».':tip(),()=>S.coin<40?'«Казна пуста — стройте рынки и мастерские».':'«Лишние монеты вложите в Мануфактуру или Кузницу».',()=>cnt('G')?'«Башни держат границу. Следите за кочевниками».':'«Стройте Башни — кочевники уважают силу».',()=>cnt('T')?'«Храм крепит дух народа. Праздник тоже не повредит!»':'«Народу нужен храм и надежда».'];
+const hire=()=>ask('📜 Писарь','«Есть кандидаты ко двору. 50🪙 за найм — но проверять их придётся вам.»',[['Нанять (−50🪙)',()=>{S.coin-=50;const a=ADV.find(x=>x.gone);a.gone=false;a.n=rr(NAMES);a.loy=50+fi(R()*20);a.tr=R()<.3;a.sus=a.cl=0;say('Новый советник: '+a.n)},()=>S.coin>=50],['Уйти']]);
+function runAway(a){const n=npcs.find(x=>x.name==a.n);if(n)anim(2,k=>n.g.position.set(n.x*(1-k),.1,n.z+(7-n.z)*k))}
+async function judge(a,hit){if(a.tr&&hit){runAway(a);await ban('⚖ Предатель разоблачён!',a.n+' бежит из Ратуши',2000);a.gone=true;a.tr=false;S.coin+=30;S.cult+=5;say('⚖ '+a.n+' оказался предателем!');if(!anyTr().length)say('Двор очищен… пока что.')}
+ else if(a.tr){a.loy-=20;ADV.forEach(x=>x.loy-=3);await one('⚖ Не хватило улик',a.n+' холодно усмехается: «Докажите!» Двор шепчется.')}
+ else{runAway(a);a.gone=true;S.cult=Math.max(0,S.cult-10);ADV.forEach(x=>{if(!x.gone)x.loy-=15});await one('⚖ Ошибка!',a.n+' был невиновен и со слезами покидает двор. Советники в ужасе.')}}
+async function talkAdv(a){const idx=ADV.indexOf(a),lf=tc.law?.65:1;let k=-1;
+ while(k!=5){k=await ask(a.r+' '+a.n,a.tr&&R()<.25?'Он нервно отводит взгляд, поправляя плащ в '+a.col+' цвете…':'«Слушаю вас, мой господин».',[['💡 Спросить совета'],['📊 Сколько зерна и монет?'],['🕵 Что говорят вокруг?'],['🎁 Наградить за 30🪙 (+верность)',null,()=>S.coin>=30],['⚖ Обвинить в измене'],['↩ Назад']]);
+  if(k==0)await one(a.n,(a.tr&&R()<.55*lf)?rr(BAD):GOOD[idx%4]());
+  if(k==1){const lie=a.tr&&R()<.8*lf,m=()=>R()<.5?.55:1.6,g=fi(S.grain*(lie?m():1)),c=fi(S.coin*(lie?m():1));await one(a.n,`«По моим книгам: зерна ${g}, монет ${c}.»`);if(lie&&(Math.abs(g-S.grain)>S.grain*.15||Math.abs(c-S.coin)>S.coin*.15)){a.sus++;say('🤔 Цифры '+a.n+' не сходятся с вашими…')}}
+  if(k==2){let txt;if(a.tr){const o=ADV.filter(x=>x!==a&&!x.gone),t=o.length?rr(o):null;if(t){t.sus++;txt=`«Стража доносит: у южной тропы ночью видели фигуру в ${t.col} плаще…»`}else txt='«Всё тихо».'}else if(sight&&!sight.gone){sight.sus++;txt=`«Говорят, у реки видели фигуру в ${sight.col} плаще…»`}else txt='«Тихо. Слухи — как вода: утекают».';await one(a.n,txt)}
+  if(k==3){S.coin-=30;a.loy=Math.min(100,a.loy+15);await one(a.n,'«Благодарю, господин. Я не забуду вашей щедрости».')}
+  if(k==4){const ok=await ask('⚖ Обвинение',`Вы обвиняете ${a.n}. Улик 📌${a.cl}, слухов 🔎${a.sus}. Уверены?`,[['Да, он предатель!'],['Подождать']]);if(ok==0){const p=a.tr?(a.cl>=2?1:a.sus>=3?.8:a.sus>=1?.5:.25):0;await judge(a,R()<p);break}}}}
+function buildRoom(k){while(room.children.length>1)room.remove(room.children[1]);npcs=[];const A=(m,x,y,z)=>{room.add(at(m,x,y,z));return m},wc={C:0xd2b48c,S:0xf1e4c3,L:0xcfd8e6,T:0xeeeeee,K:0xf0d9a0}[k];
+ A(box(14,.2,14,{C:0x8b5a3a,S:0x9a7a5a,L:0x888a96,T:0xd8d2c0,K:0x9a7a4a}[k]),0,0,0);[[0,-7,14,.4],[0,7,14,.4],[-7,0,.4,14],[7,0,.4,14]].forEach(([x,z,w,d])=>A(box(w,5,d,wc),x,2.5,z));
+ if(k=='C'){A(box(10,.9,1.6,0x6b4423),0,.55,-1.5);A(box(3,.05,6,0xb5442a),0,.13,1);A(box(.1,3,1.2,0x3a86ff),-6.7,2.6,-3);A(box(.1,3,1.2,0xe63946),6.7,2.6,-3);ADV.forEach((a,i)=>{if(!a.gone)npc(-4.5+i*3,-3.4,a.c,a.n,()=>talkAdv(a),a.tr?1.8:1)});if(ADV.some(a=>a.gone))npc(-5.5,4,0x777777,'Писарь',hire)}
+ if(k=='S'){for(let i=0;i<6;i++)A(box(1.6,.8,.8,0x8b5a2b),(i%3-1)*3,.4,fi(i/3)*3);A(box(6,2.2,.1,0x1d3a2a),0,2.5,-6.7);A(box(4,.05,.02,0xffffff),0,2.8,-6.6);npc(0,-5,0x3a86ff,'Учитель',FN.S)}
+ if(k=='L'){A(box(2,.9,1,0x555555),-3,.45,-4);A(box(2,.9,1,0x555555),3,.45,-4);[[-3,0x66ffaa],[3,0xff66aa]].forEach(([x,c])=>{const f=sph(.35,c);f.material.emissive=new THREE.Color(c).multiplyScalar(.5);A(f,x,1.2,-4)});A(cyl(.3,2.5,0x444444),0,1.25,-5.8);const sp=sph(.5,0x7ef9ff);sp.material.emissive=new THREE.Color(0x2299cc);A(sp,0,2.8,-5.8);npc(4.5,-1,0xdddddd,'Алхимик',FN.L)}
+ if(k=='T'){A(box(3,1,1.2,0xffffff),0,.5,-5.5);[-1,1].forEach(x=>{A(cyl(.1,.6,0xfff4d0),x,1.3,-5.5);const f=sph(.12,0xffcc33);f.material.emissive=new THREE.Color(0xff9900);A(f,x,1.7,-5.5)});for(let i=0;i<3;i++){A(box(2,.5,.6,0x6b4423),-3,.25,i*1.8-1);A(box(2,.5,.6,0x6b4423),3,.25,i*1.8-1)}npc(0,-4,0xeeeeee,'Жрица',FN.T)}
+ if(k=='K'){[-3.5,3.5].forEach((x,i)=>{A(box(2.4,1,1.2,0xe9c46a),x,.5,-4.5);for(let j=0;j<4;j++)A(sph(.2,[0xe63946,0xffd23f,0x7cb518,0xb388ff][j]),x-.8+j*.5,1.2,-4.5)});npc(0,-3.5,0xb06fe0,'Торговец',FN.K)}}
+async function enterB(i){const b=blds.get(i);if(!b||inside)return;$('#fade').style.opacity=1;await wait(450);outP=[px,pz,yaw];buildRoom(b.k);inside=b.k;px=0;pz=5;yaw=0;pitch=0;room.visible=true;$('#fade').style.opacity=0}
+async function leave(){$('#fade').style.opacity=1;await wait(450);room.visible=false;inside=null;[px,pz,yaw]=outP;$('#fade').style.opacity=0}
+function actUI(){let h='';if(inside){const j=npcs.findIndex(n=>Math.hypot(px-n.x,pz-n.z)<3.4);if(j>=0)h+=`<button data-a="talk:${j}">💬 ${npcs[j].name}</button>`;h+=`<button data-a="leave">🚪 ${TX('Выйти')}</button>`}
+ else{let best=null,bd=4.8;blds.forEach((b,i)=>{if(!ENT[b.k])return;const d=Math.hypot(px-b.g.position.x,pz-b.g.position.z);if(d<bd){bd=d;best=[i,b]}});if(best)h+=`<button data-a="enter:${best[0]}">🚪 ${TX('Войти')}: ${TX(ENT[best[1].k])}</button>`;
+  const Q=PT.find(p=>Math.hypot(px-p.x(),pz-p.z())<11);if(Q)h+=`<button data-a="trade:${Q.k}">🤝 ${TX('Торговать')}: ${TX(Q.nm)}</button>`;
+  let ai=-1,ad=7;animals.forEach((a,j)=>{if(a.alive&&(a.k=='deer'||a.k=='rabbit')){const d=Math.hypot(px-a.x,pz-a.z);if(d<ad){ad=d;ai=j}}});if(ai>=0)h+=`<button data-a="hunt:${ai}">🏹 ${TX('Охотиться')}</button>`}
+ if(h!==actH){actH=h;$('#act').innerHTML=h}}
+$('#act').onclick=e=>{const b=e.target.closest('button');if(!b||modal)return;const[a,i]=b.dataset.a.split(':');if(a=='enter')enterB(+i);if(a=='leave')leave();if(a=='talk')npcs[+i].fn();if(a=='trade')openTrade(i);if(a=='hunt')hunt(+i)};
+const mmc=$('#mm').getContext('2d'),BCOL=['#4fae3c','#e8c36a','#e9f2f8','#3d7a62','#e9a0c4','#2f5f45','#4a3a38'];
+function drawMM(){const c=mmc;for(let i=0;i<G*G;i++){const t=type[i],x=i%G,z=fi(i/G);c.fillStyle=br[i]?'#c2a878':t==1||t==2?'#2f8fd6':t==3?'#888':t==4?'#c2a878':t==5?'#4a2f18':t==6?'#777':BCOL[bio(x,z)];c.fillRect(x*3,z*3,3,3)}
+ const dot=(x,z,col,r=3)=>{c.fillStyle=col;c.beginPath();c.arc((x+HW)/CS*3,(z+HW)/CS*3,r,0,7);c.fill()};dot(HX,HZ,'#3a86ff');dot(NX,NZ,'#f4a261');dot(NCX,NCZ,'#e63946');dot(CRX,CRZ,'#7ef9ff',2);if(thief)dot(thief.v.x,thief.v.z,'#ff00ff',3);if(!inside)dot(px,pz,'#fff',3)}
+
+// ===== v2: вода, декор, кино =====
+let cinema=null;
+function cineF(f,dur){return new Promise(r=>{cinema={f,dur,t:0,r}})}
+function cine(x,z,h=12,dur=3,rad=14){return new Promise(r=>{cinema={x,z,h,dur,rad,t:0,r}})}
+const WTR=new THREE.InstancedMesh(new THREE.PlaneGeometry(CS,CS),new THREE.MeshPhongMaterial({color:0x3aa7e8,transparent:true,opacity:.88,shininess:120,specular:0xddeeff}),G*G),FM=new THREE.InstancedMesh(new THREE.SphereGeometry(.2,6,4),new THREE.MeshLambertMaterial({color:0xffffff}),160),foam=[],dmw=new THREE.Object3D();
+WTR.frustumCulled=false;FM.frustumCulled=false;scene.add(WTR,FM);for(let k=0;k<160;k++)foam.push({x:0,z:0,v:1.5+R()*2,on:0});let wetSet=new Set(),wetList=[],wfT=1;
+function waterFrame(t,dt){wfT+=dt;if(wfT>.4){wfT=0;wetList=[];for(let i=0;i<G*G;i++)if((type[i]==1||type[i]==2)&&wa[i]>.6)wetList.push(i);wetSet=new Set(wetList)}
+ for(let i=0;i<G*G;i++){const ty=type[i],x=i%G,z=fi(i/G);dmw.rotation.set(-Math.PI/2,0,0);if((ty==1||ty==2)&&wa[i]>.02){dmw.position.set(cw(x),.02+wa[i]*.1+Math.sin(t*2.4+x*.9+z*.55)*.05,cw(z));dmw.scale.setScalar(1.02)}else{dmw.position.set(0,-5,0);dmw.scale.setScalar(.001)}dmw.updateMatrix();WTR.setMatrixAt(i,dmw.matrix)}
+ WTR.instanceMatrix.needsUpdate=true;
+ foam.forEach((f,k)=>{if(!f.on||!wetSet.has(I(cl(gx(f.x),0,G-1),cl(gx(f.z),0,G-1)))){if(wetList.length){const i=rr(wetList);f.x=cw(i%G)+(R()-.5)*CS;f.z=cw(fi(i/G))+(R()-.5)*CS;f.on=1}else f.on=0}f.z+=f.v*dt;dmw.rotation.set(0,0,0);dmw.position.set(f.x,.2+Math.sin(t*5+k)*.03,f.z);dmw.scale.set(f.on?1:.001,.35,f.on?1.8:.001);dmw.updateMatrix();FM.setMatrixAt(k,dmw.matrix)});FM.instanceMatrix.needsUpdate=true}
+const lamps=[];
+function decor(){const g=new THREE.Group(),A=(m,x,y,z)=>{g.add(at(m,x,y,z));return m};A(cyl(.7,.8,0x8d8d8d,10),0,.4,0);A(cyl(.5,.1,0x2a6fa8,10),0,.78,0);A(box(.1,1.5,.1,0x6b4423),-.6,1.2,0);A(box(.1,1.5,.1,0x6b4423),.6,1.2,0);A(cone(1,.5,0xb5442a,4),0,2.1,0);g.position.set(HX-5,gh(I(home[0]-2,home[1]+2)),HZ+5);scene.add(g);
+ [[-4,-3],[4,-3],[-4,3],[4,3]].forEach(([a,b])=>{const l=new THREE.Group();l.add(at(cyl(.06,2,0x333333),0,1,0));const bulb=sph(.2,0xffd27a);bulb.material.emissive=new THREE.Color(0xffaa33);l.add(at(bulb,0,2.1,0));l.position.set(HX+a,gh(I(home[0],home[1])),HZ+b);scene.add(l);lamps.push(bulb)});
+ for(let k=0;k<3;k++){const h=new THREE.Group();h.add(at(cyl(.7,.9,0xe0b84a,8),0,.45,0),at(cone(.7,.6,0xe0b84a,8),0,1.1,0));h.position.set(HX-8+k*1.8,gh(I(home[0]-3,home[1]-1)),HZ-3);scene.add(h)}}
+[[-1,0],[-2,0],[-3,0],[1,0],[2,0],[0,1],[0,2],[0,-1],[0,-2]].forEach(([a,b])=>{const i=I(home[0]+a,home[1]+b);if(!type[i]){type[i]=4;upd(i)}});decor();
+function upgradeH(){blds.forEach(b=>{if(b.k!='H'||b.n)return;const p=b.g.position;scene.remove(b.g);const g=mkB('H');g.position.set(p.x,p.y,p.z);scene.add(g);b.g=g;g.scale.setScalar(.01);anim(.9,k=>g.scale.setScalar(Math.max(.01,k)))})}
+function seasonTrees(ns){LEAVES.forEach(l=>{const c=cc.setHex(l.hex);if(l.lf==1&&ns==2)c.setHex([0xe8933a,0xd9532a,0xf2c14e][l.idx%3]);else if(ns==3)c.lerp(new THREE.Color(0xf4f8ff),l.lf==1?.85:.6);IMS[l.k].setColorAt(l.idx,c)});for(const k of ['FOL','CAN'])if(IMS[k].instanceColor)IMS[k].instanceColor.needsUpdate=true}
+async function intro(){modal++;const wx=cw(rc(0)),P=[[wx+6,15,cw(-4),wx,2,cw(4)],[wx+9,11,cw(8),wx,1,cw(14)],[cw(rc(8))+5,9,cw(7),HX,2,HZ],[HX-9,3.5,HZ+9,HX,2,HZ-1]],caps=['Ледяные вершины. Отсюда река Валдора течёт на юг…','Её воды кормят поля — и ссорят народы…','Ваша деревня. Ваш народ. Ваша судьба.'];let ci=-1;
+ await cineF(k=>{const s=k*(P.length-1),j=Math.min(P.length-2,fi(s)),f=s-j,e=f*f*(3-2*f),a=P[j],b=P[j+1],c=Math.min(2,fi(k*3));if(c!=ci){ci=c;ban(caps[c],'',3400)}return a.map((v,n)=>v+(b[n]-v)*e)},14);modal--;ui()}
+function messenger(){const v=mkV('x',NX,NZ-4,0xe9a23b);v.sp=3.4;cine(NX,NZ,12,2.6);go(v,I(home[0]-1,home[1]+1),()=>{v.w=1;v.fin=()=>{cine(HX,HZ,8,3);ask('✉ Гонец из Ольховой','Запыхавшийся гонец протягивает свиток: «Мы слышали, вы копаете каналы и ставите дамбы. Вода — общая. Дадите ли слово, что не оставите нас без неё?»',[['Дать слово (+10 отн., не вздумайте высушить их!)',()=>{NB.rel+=10;NB.oath=1}],['Промолчать',()=>{NB.rel-=3}],['Пригрозить (−10 отн.)',()=>{NB.rel-=10}]]).then(()=>{go(v,I(gx(NX),gx(NZ)),()=>{scene.remove(v.m);vs.splice(vs.indexOf(v),1)})})}})}
+
+// ===== аккаунты, меню, сохранения =====
+const AU={ru:'Выберите язык|Вход|Регистрация|Имя|Логин|Пароль|Создать аккаунт|Войти|Нет аккаунта? Регистрация|Уже есть аккаунт? Войти|Аватар|Мои игры|Новая игра|Продолжить|Удалить|Сохранений пока нет — начните новую игру|Всего ресурсов во всех играх|Выйти из аккаунта|День|жителей|Сохранить и выйти в меню|Вернуться в игру|Такой логин уже занят|Неверный логин или пароль|Заполните все поля (пароль от 4 символов)|Название игры|Язык|Удалить это сохранение?|Добро пожаловать|Сохранено|Игра|Рассвет цивилизации',
+en:'Choose language|Sign in|Sign up|Name|Username|Password|Create account|Sign in|No account? Sign up|Have an account? Sign in|Avatar|My games|New game|Continue|Delete|No saves yet — start a new game|Total resources across all games|Log out|Day|people|Save and exit to menu|Back to game|This username is taken|Wrong username or password|Fill in all fields (password 4+ characters)|Game name|Language|Delete this save?|Welcome|Saved|Game|Dawn of Civilization',
+es:'Elige idioma|Iniciar sesión|Registrarse|Nombre|Usuario|Contraseña|Crear cuenta|Entrar|¿Sin cuenta? Regístrate|¿Ya tienes cuenta? Entra|Avatar|Mis partidas|Nueva partida|Continuar|Borrar|Aún no hay partidas: empieza una nueva|Recursos totales de todas las partidas|Cerrar sesión|Día|habitantes|Guardar y salir al menú|Volver al juego|Ese usuario ya existe|Usuario o contraseña incorrectos|Rellena todos los campos (contraseña de 4+ caracteres)|Nombre de la partida|Idioma|¿Borrar esta partida?|Bienvenido|Guardado|Partida|El amanecer de la civilización',
+de:'Sprache wählen|Anmelden|Registrieren|Name|Benutzername|Passwort|Konto erstellen|Anmelden|Kein Konto? Registrieren|Schon ein Konto? Anmelden|Avatar|Meine Spiele|Neues Spiel|Fortsetzen|Löschen|Noch keine Spielstände – starten Sie ein neues Spiel|Gesamte Ressourcen aller Spiele|Abmelden|Tag|Einwohner|Speichern und ins Menü|Zurück zum Spiel|Dieser Benutzername ist vergeben|Falscher Benutzername oder Passwort|Alle Felder ausfüllen (Passwort ab 4 Zeichen)|Spielname|Sprache|Diesen Spielstand löschen?|Willkommen|Gespeichert|Spiel|Morgenröte der Zivilisation',
+fr:'Choisissez la langue|Connexion|Inscription|Nom|Identifiant|Mot de passe|Créer un compte|Se connecter|Pas de compte ? Inscrivez-vous|Déjà un compte ? Connectez-vous|Avatar|Mes parties|Nouvelle partie|Continuer|Supprimer|Aucune sauvegarde — lancez une nouvelle partie|Ressources totales de toutes les parties|Se déconnecter|Jour|habitants|Sauvegarder et quitter vers le menu|Retour au jeu|Cet identifiant est déjà pris|Identifiant ou mot de passe incorrect|Remplissez tous les champs (mot de passe de 4+ caractères)|Nom de la partie|Langue|Supprimer cette sauvegarde ?|Bienvenue|Sauvegardé|Partie|L’aube de la civilisation',
+pt:'Escolha o idioma|Entrar|Cadastro|Nome|Usuário|Senha|Criar conta|Entrar|Sem conta? Cadastre-se|Já tem conta? Entre|Avatar|Meus jogos|Novo jogo|Continuar|Excluir|Nenhum save ainda — comece um novo jogo|Recursos totais de todos os jogos|Sair da conta|Dia|habitantes|Salvar e sair para o menu|Voltar ao jogo|Esse usuário já existe|Usuário ou senha incorretos|Preencha todos os campos (senha com 4+ caracteres)|Nome do jogo|Idioma|Excluir este save?|Bem-vindo|Salvo|Jogo|A aurora da civilização',
+it:'Scegli la lingua|Accedi|Registrati|Nome|Utente|Password|Crea account|Accedi|Nessun account? Registrati|Hai un account? Accedi|Avatar|Le mie partite|Nuova partita|Continua|Elimina|Nessun salvataggio — inizia una nuova partita|Risorse totali di tutte le partite|Esci dall’account|Giorno|abitanti|Salva ed esci al menu|Torna al gioco|Nome utente già in uso|Utente o password errati|Compila tutti i campi (password da 4+ caratteri)|Nome della partita|Lingua|Eliminare questo salvataggio?|Benvenuto|Salvato|Partita|L’alba della civiltà',
+tr:'Dil seçin|Giriş|Kayıt ol|Ad|Kullanıcı adı|Şifre|Hesap oluştur|Giriş yap|Hesabın yok mu? Kayıt ol|Hesabın var mı? Giriş yap|Avatar|Oyunlarım|Yeni oyun|Devam|Sil|Henüz kayıt yok — yeni oyun başlatın|Tüm oyunlardaki toplam kaynaklar|Çıkış yap|Gün|kişi|Kaydet ve menüye çık|Oyuna dön|Bu kullanıcı adı alınmış|Kullanıcı adı veya şifre hatalı|Tüm alanları doldurun (şifre en az 4 karakter)|Oyun adı|Dil|Bu kayıt silinsin mi?|Hoş geldiniz|Kaydedildi|Oyun|Uygarlığın Şafağı',
+zh:'选择语言|登录|注册|昵称|用户名|密码|创建账号|登录|没有账号？去注册|已有账号？去登录|头像|我的游戏|新游戏|继续|删除|还没有存档——开始新游戏吧|所有游戏的资源总计|退出账号|第几天|居民|保存并返回菜单|返回游戏|该用户名已被占用|用户名或密码错误|请填写所有项（密码至少4位）|游戏名称|语言|删除此存档？|欢迎|已保存|游戏|文明的曙光',
+ja:'言語を選択|ログイン|新規登録|名前|ユーザー名|パスワード|アカウント作成|ログイン|アカウントがない？登録|アカウントがある？ログイン|アバター|マイゲーム|新しいゲーム|続ける|削除|セーブがありません。新しいゲームを始めましょう|全ゲームの資源合計|ログアウト|日目|人|保存してメニューへ|ゲームに戻る|このユーザー名は使われています|ユーザー名かパスワードが違います|すべて入力してください（パスワードは4文字以上）|ゲーム名|言語|このセーブを削除しますか？|ようこそ|保存しました|ゲーム|文明の夜明け'};
+for(const k in AU)AU[k]=AU[k].split('|');const A=i=>(AU[LANG]||AU.en)[i];
+const AVS=['🧑‍🌾','👩‍🌾','🧙','👑','🛡','🏹','🧝','🦊','🐻','🦉','🐺','🐉'];
+const uget=()=>{try{return JSON.parse(ST.getItem('civ_users')||'{}')}catch(e){return{}}},uset=o=>ST.setItem('civ_users',JSON.stringify(o));
+const sget=u=>{try{return JSON.parse(ST.getItem('civ_saves_'+u)||'[]')}catch(e){return[]}},sset=(u,a)=>ST.setItem('civ_saves_'+u,JSON.stringify(a));
+async function hashPw(p,salt){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+':'+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){let h=5381;const s=salt+p;for(let i=0;i<s.length;i++)h=(h*33^s.charCodeAt(i))>>>0;return'f'+h}}
+const ACC=()=>ST.getItem('civ_session'),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let started=false,curSave=null,appAv=AVS[0];
+const app=$('#app');
+function appShell(inner){app.style.display='block';app.innerHTML=`<div class="aw"><div class="ah"><b>🏰 ${esc(A(31))}</b><select id="lg">${LANGS.map(l=>`<option value="${l[0]}" ${l[0]==LANG?'selected':''}>${l[1]}</option>`).join('')}</select></div>${inner}</div>`;$('#lg').onchange=e=>{ST.setItem('civ_lang',e.target.value);location.reload()}}
+function appLang(){app.style.display='block';app.innerHTML=`<div class="aw"><div class="ah"><b>🏰 ${esc(A(31))}</b></div><h2>🌍 ${esc(A(0))}</h2><div class="lg">${LANGS.map(l=>`<button data-l="${l[0]}">${l[1]}</button>`).join('')}</div></div>`;app.onclick=e=>{const b=e.target.closest('button');if(b&&b.dataset.l){ST.setItem('civ_lang',b.dataset.l);ST.setItem('civ_lang_set','1');location.reload()}}}
+function appAuth(mode,err=''){const up=mode=='up';appShell(`<div class="card"><h2>${esc(A(up?2:1))}</h2>${up?`<div class="avs">${AVS.map(a=>`<button data-av="${a}" class="${a==appAv?'on':''}">${a}</button>`).join('')}</div>`:''}${up?`<label>${esc(A(3))}<input id="fn" maxlength="24"></label>`:''}<label>${esc(A(4))}<input id="fu" maxlength="20" autocapitalize="none"></label><label>${esc(A(5))}<input id="fp" type="password" maxlength="40"></label><div class="er">${esc(err)}</div><button class="big" id="go">${esc(A(up?6:7))}</button><button class="lnk" id="sw">${esc(A(up?9:8))}</button></div>`);
+ app.onclick=e=>{const b=e.target.closest('button');if(b&&b.dataset.av){appAv=b.dataset.av;appAuth(mode,err)}};
+ $('#sw').onclick=()=>appAuth(up?'in':'up');
+ $('#go').onclick=async()=>{const u=$('#fu').value.trim().toLowerCase(),p=$('#fp').value,n=up?$('#fn').value.trim():'',us=uget();if(!u||p.length<4||(up&&!n))return appAuth(mode,A(24));
+  if(up){if(us[u])return appAuth(mode,A(22));const salt=Math.random().toString(36).slice(2);us[u]={name:n,av:appAv,salt,h:await hashPw(p,salt)};uset(us);ST.setItem('civ_session',u);appMenu()}
+  else{const x=us[u];if(!x||x.h!==await hashPw(p,x.salt))return appAuth(mode,A(23));ST.setItem('civ_session',u);appMenu()}}}
+function totals(sv){const t={grain:0,seed:0,wood:0,stone:0,coin:0,know:0,cult:0};sv.forEach(g=>{if(g.S)for(const k in t)t[k]+=Math.floor(g.S[k]||0)});return t}
+function appMenu(){const u=ACC(),x=uget()[u];if(!x)return appAuth('in');const sv=sget(u),tt=totals(sv);
+ appShell(`<div class="mg"><div class="side"><div class="card pf"><div class="av">${esc(x.av)}</div><div><b>${esc(x.name)}</b><br><small>@${esc(u)}</small><br><small>${esc(A(28))}!</small></div></div><div class="card"><small>${esc(A(16))}</small><div class="tot"><span>🌾${tt.grain}</span><span>🌱${tt.seed}</span><span>🪵${tt.wood}</span><span>🪨${tt.stone}</span><span>🪙${tt.coin}</span><span>📜${tt.know}</span><span>🎭${tt.cult}</span></div></div><button class="lnk" id="lo">${esc(A(17))}</button></div>
+ <div class="main"><div class="card"><h2>${esc(A(11))}</h2><div class="nw"><input id="gn" maxlength="30" placeholder="${esc(A(25))}" value="${esc(A(30))} ${sv.length+1}"><button class="big" id="nw">➕ ${esc(A(12))}</button></div>${sv.length?sv.map(g=>`<div class="sv"><div><b>${esc(g.name)}</b><br><small>${esc(dayLbl(g.day||1))} · ${esc(TX(g.curEra||'Деревня'))} · 👥${g.pop||0} · ${new Date(g.ts).toLocaleString()}</small><br><small>🌾${Math.floor(g.S?g.S.grain:0)} 🪵${Math.floor(g.S?g.S.wood:0)} 🪨${Math.floor(g.S?g.S.stone:0)} 🪙${Math.floor(g.S?g.S.coin:0)} 📜${Math.floor(g.S?g.S.know:0)}</small></div><div><button class="big" data-c="${g.id}">▶ ${esc(A(13))}</button><button class="lnk" data-d="${g.id}">🗑 ${esc(A(14))}</button></div></div>`).join(''):`<p class="em">${esc(A(15))}</p>`}</div></div></div>`);
+ $('#lo').onclick=()=>{ST.removeItem('civ_session');appAuth('in')};
+ $('#nw').onclick=()=>{const id=String(Date.now()),sd=Math.random()*1e9|0,a=sget(u);a.push({id,name:$('#gn').value.trim()||A(30),ts:Date.now(),seed:sd,day:1,pop:4,curEra:'Деревня',fresh:1});sset(u,a);ST.setItem('civ_intent',JSON.stringify({mode:'new',id,seed:sd}));location.reload()};
+ app.onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.c){const g=sget(u).find(z=>z.id==b.dataset.c);ST.setItem('civ_intent',JSON.stringify({mode:g.fresh?'new':'load',id:g.id,seed:g.seed}));location.reload()}if(b.dataset.d&&confirm(A(27))){sset(u,sget(u).filter(z=>z.id!=b.dataset.d));appMenu()}}}
+function bootApp(){if(!ST.getItem('civ_lang_set'))return appLang();if(!ACC())return appAuth('in');appMenu()}
+function wearList(){const o=[];for(let i=0;i<G*G;i++)if(wear[i]>.3)o.push([i,Math.round(wear[i]*100)]);return o}
+function serialize(){const types=[],brs=[];for(let i=0;i<G*G;i++){if(type[i]>=2&&type[i]<=4)types.push([i,type[i],orig[i]]);if(br[i])brs.push(i)}
+ return{day,gt,season,curEra,pop:popN(),S:{...S},tc:{...tc},ideo:{...ideo},NB:{...NB},NB2:{...NB2},NB3:{...NB3},NB4:{...NB4},ADV:ADV.map(a=>({...a})),counts:{f:vs.filter(v=>v.role=='f').length,w:vs.filter(v=>v.role=='w').length},
+ plots:[...plots.values()].filter(p=>!p.n).map(p=>[p.i,+p.g.toFixed(2),p.sown,+p.m.toFixed(2)]),blds:[...blds.entries()].filter(([i,b])=>!b.n&&b.k!='C').map(([i,b])=>[i,b.k]),types,br:brs,res:[...res.entries()].map(([i,r])=>[i,r.k,r.hp||0]),wear:wearList(),sabAt,raidAt,evAt,regrow:regrow.map(x=>({...x}))}}
+function saveGame(){const u=ACC();if(!u||!curSave)return;const a=sget(u),i=a.findIndex(g=>g.id==curSave.id);if(i<0)return;a[i]={...a[i],...serialize(),name:a[i].name,id:a[i].id,seed:a[i].seed,ts:Date.now(),fresh:0};sset(u,a)}
+function applySave(d){day=d.day;gt=d.gt;season=d.season||0;curEra=d.curEra||'Деревня';Object.assign(S,d.S);for(const k in tc)delete tc[k];Object.assign(tc,d.tc);Object.assign(ideo,d.ideo);Object.assign(NB,d.NB);Object.assign(NB2,d.NB2);Object.assign(NB3,d.NB3||{});Object.assign(NB4,d.NB4||{});
+ d.ADV.forEach((a,i)=>Object.assign(ADV[i],a));sabAt=d.sabAt;raidAt=d.raidAt;evAt=d.evAt;
+ [...plots.values()].filter(p=>!p.n).forEach(p=>{scene.remove(p.gr);type[p.i]=0;upd(p.i);plots.delete(p.i)});
+ d.plots.forEach(([i,g,sw,m])=>{mkPlot(i,0);const p=plots.get(i);p.g=g;p.sown=sw;p.m=m});
+ d.types.forEach(([i,t,o])=>{type[i]=t;orig[i]=o;upd(i)});d.br.forEach(i=>{br[i]=1;mkBridge(i)});
+ d.blds.forEach(([i,k])=>{type[i]=0;place(i,k,0xe8d8b0,false)});
+ const keep=new Set(d.res.map(r=>r[0]));[...res.keys()].forEach(i=>{res.get(i).m.scale.setScalar(.01);if(!keep.has(i))res.delete(i)});d.res.forEach(([i,k,hp])=>{if(!res.has(i))addRes(i,k);const r=res.get(i);if(r)r.hp=hp||r.hp});
+ regrow.length=0;(d.regrow||[]).forEach(x=>regrow.push(x));(d.wear||[]).forEach(([i,w])=>wear[i]=w/100);
+ for(const role of ['f','w']){const have=vs.filter(v=>v.role==role);const want=d.counts[role];for(let k=have.length;k<want;k++)spawn(role);for(let k=want;k<have.length;k++){const v=have[k];scene.remove(v.m);vs.splice(vs.indexOf(v),1)}}
+ flow();for(let i=0;i<G*G;i++){if(type[i]==1||type[i]==2)wa[i]=wet[i]?1:0;upd(i)}seasonTrees(season);upgradeH();ui()}
+
+// ===== v3: экономика, мир, существа =====
+let hungry=0,lastAid=-9,chopped=0,grassDirty=true,lastGrassC=[1e9,1e9],lastZone=-1,fishT=3,lastSeedT=0;const regrow=[],growing=[],NB3={rel:10,tr:0},NB4={rel:10,tr:0},fires=[],animals=[],gateKnights=[];
+const rb=k=>{const r=ideo.rl,c=ideo.cu;let m=1;if(k=='farm'){if(r=='sun')m*=1.15;if(c=='farm')m*=1.1}if(k=='wood'&&r=='forest')m*=1.25;if(k=='know'&&r=='light')m*=1.2;if(k=='coin'){if(r=='anc')m*=1.1;if(c=='merch')m*=1.25}return m};
+const cdisc=(c,k)=>{const o={...c};if(ideo.cu=='farm'&&k=='H')o.w=Math.ceil(o.w*.8);if(ideo.cu=='art'){if(o.w)o.w=Math.ceil(o.w*.9);if(o.s)o.s=Math.ceil(o.s*.85)}if(ideo.cu=='war'&&k=='G'){o.w=Math.ceil(o.w*.8);o.s=Math.ceil(o.s*.8)}return o};
+function rates(){const pop=popN(),mk=cnt('K'),I2=ideo.id=='t'?1.5:1,cm=tc.coin?1.5:1;return{eat:pop*(season==3?1.5:1),coin:(pop*.3+mk*4*I2*cm)*ab(1,1.2)*rb('coin')+(NB.tr+NB2.tr+NB3.tr+NB4.tr)*8}}
+function farm(p){if(p.sown&&p.g>=1){const y=Math.round((tc.plow?12:8)*(ideo.id=='c'?1.25:1)*(season==2?1.25:1)*(1+.15*Math.min(3,cnt('Y')))*rb('farm'));S.grain+=y;S.seed+=2;p.sown=0;p.g=0;fl('+'+y+'🌾 +2🌱',p.gr.position.x,p.gr.position.z);p.st.forEach(s=>s.scale.y=.01)}
+ else if(!p.sown&&(S.seed>=1||S.grain>=2)){if(S.seed>=1)S.seed--;else S.grain-=2;p.sown=1;p.g=.02;p.m=near(p.i,tc.irr?3:2)?1:p.m;fx(p.gr.position.x,p.gr.position.z,0x7a5a2a,6,2,.6)}}
+function forage(v){let t=null;for(let k=0;k<14&&t===null;k++){const x=HX+(R()-.5)*34,z=HZ+(R()-.5)*34,i=I(cl(gx(x),0,G-1),cl(gx(z),0,G-1)),b=bio(i%G,fi(i/G));if(!type[i]&&b!=1&&b!=2&&b!=6)t=i}if(t===null){v.idle=2;return}go(v,t,()=>work(v,2.2,()=>{const g=season==3?1:2;S.grain+=g;if(R()<.4)S.seed+=1;fl('+'+g+'🌾',v.x,v.z)}))}
+function workDone(v,r,i){r.r=null;const X=r.m.position.x,Z=r.m.position.z;
+ if(r.k=='t'){const g=Math.round((cnt('F')?5:3)*rb('wood'));S.wood+=g;fl('+'+g+'🪵',X,Z);chopped++;res.delete(i);regrow.push({i,d:day+3});anim(.8,t=>r.m.scale.setScalar(Math.max(.01,1-t)))}
+ else{r.hp--;const g=cnt('F')?3:2;S.stone+=g;fl('+'+g+'🪨',X,Z);if(r.hp<=0){res.delete(i);anim(.8,t=>r.m.scale.setScalar(Math.max(.01,1-t)));say('⛏ Месторождение истощено')}}}
+function regrowTick(){for(let k=regrow.length-1;k>=0;k--){const q=regrow[k];if(q.d<=day){regrow.splice(k,1);if(!type[q.i]&&!res.has(q.i)){addRes(q.i,'t');const r=res.get(q.i);r.m.scale.setScalar(.15);growing.push({o:r.m,t0:gt})}}}}
+function nearRes(i,k,r){const x=i%G,z=fi(i/G);for(let a=-r;a<=r;a++)for(let b=-r;b<=r;b++)if(ok(x+a,z+b)){const j=I(x+a,z+b),q=res.get(j);if(q&&q.k==k&&!q.r)return[j,q]}return null}
+function industryTick(){blds.forEach((b,i)=>{if(b.n)return;
+ if(b.k=='W'){const f=nearRes(i,'t',4);if(f){const[j,q]=f;res.delete(j);regrow.push({i:j,d:day+4});anim(.8,t=>q.m.scale.setScalar(Math.max(.01,1-t)));S.wood+=Math.round(6*rb('wood'));chopped++}else if(!b.warn){b.warn=1;say('🪚 Вокруг лесопилки не осталось деревьев — ждите, пока вырастут новые')}}
+ if(b.k=='Q'){const f=nearRes(i,'r',4);if(f){const[j,q]=f;q.hp--;S.stone+=4;if(q.hp<=0){res.delete(j);anim(.8,t=>q.m.scale.setScalar(Math.max(.01,1-t)));say('⛏ Месторождение возле каменоломни истощено')}}else if(!b.warn){b.warn=1;say('⛏ Рядом с каменоломней нет месторождений — найдите новые в горах')}}
+ if(b.k=='V'){S.cult+=2;ADV.forEach(a=>{if(!a.gone)a.loy=Math.min(100,a.loy+1)})}
+ if(b.k=='D')S.grain+=4;
+ if(b.k=='P'&&S.grain>popN()*2&&popN()<cap()&&R()<.5)spawn(R()<.5?'f':'w');
+ if(b.k=='B'){S.grain-=1;if(!b.kn){b.kn=1;S.knights++;const v=mkV('g',b.g.position.x+2,b.g.position.z+2,0x9aa4b0);v.camp=[b.g.position.x,b.g.position.z]}}})}
+// люди
+function dress(g,role,c){const A=(m,x,y,z)=>{g.add(at(m,x,y,z));return m},male=R()<.55,hair=rr([0x2a1a0e,0x6b4423,0xd8b45a,0x1a1a1a,0xb0b0b0]),hat=R();
+ if(role=='g'){A(cyl(.3,.9,0x9aa4b0,10),0,.45,0);A(sph(.26,0xb8c2cc),0,1.15,0);A(box(.3,.12,.05,0x222222),0,1.15,.22);A(cone(.12,.4,0xc1121f,5),0,1.55,0);g.userData.arm=A(box(.1,.6,.1,0x9aa4b0),.38,.9,0);A(cyl(.03,1.6,0x6b4423,5),-.4,.9,.1);A(box(.3,.45,.06,0x3a5fcf),-.35,.7,.25);return}
+ if(role=='i'){A(box(.5,.1,.5,0xd8402a),0,1.28,0);for(let j=-1;j<2;j++)A(box(.05,.4,.03,[0xff4d4d,0xffd23f,0x3a86ff][j+1]),j*.14,1.5,0);A(box(.46,.8,.12,0x1a1a1a),0,.9,-.2);A(box(.15,.06,.02,0xff4d4d),0,1.12,.2);return}
+ if(role=='k'){A(sph(.25,0xe9e4d8),0,1.2,0);A(box(.2,.05,.05,0x111111),0,1.06,.2);return}
+ if(male){if(R()<.45)A(box(.2,.05,.06,0x2a1a0e),0,1.03,.21);if(hat<.5){A(cyl(.4,.04,0xd9b45a,10),0,1.28,0);A(cyl(.2,.2,0xd9b45a,8),0,1.38,0)}else if(hat<.7)A(cyl(.23,.14,rr([0x3a5fcf,0x8b1a1a,0x2a2a2a]),8),0,1.3,0);else A(sph(.23,hair),0,1.18,-.02)}
+ else{A(cone(.35,.8,hair,8),0,.85,-.12);A(sph(.23,hair),0,1.18,-.03);if(R()<.4)A(cyl(.35,.03,0xf1e4c3,10),0,1.28,0)}}
+function campOf(r){return r=='n'?[NX,NZ]:r=='k'?[NCX,NCZ]:r=='i'?[NTX,NTZ]:r=='g'?[FKX,FKZ+3]:null}
+// животные
+function mkAnimal(kind,x,z){const g=new THREE.Group(),A=(m,a,b,c)=>{g.add(at(m,a,b,c));return m},L4=[[.4,.15],[.4,-.15],[-.4,.15],[-.4,-.15]];
+ if(kind=='deer'){A(box(1.1,.5,.45,0xa0713a),0,.9,0);A(box(.3,.7,.25,0xa0713a),.6,1.3,0);A(box(.4,.25,.25,0xa0713a),.85,1.6,0);L4.forEach(([a,b])=>A(cyl(.05,.7,0x6b4423,5),a,.35,b));A(box(.05,.4,.05,0xe8dcc0),.8,1.95,.1);A(box(.05,.4,.05,0xe8dcc0),.8,1.95,-.1)}
+ else if(kind=='rabbit'){A(sph(.22,0xe0d8cc),0,.25,0);A(sph(.13,0xe0d8cc),.2,.35,0);A(box(.04,.3,.06,0xe0d8cc),.2,.6,.05);A(box(.04,.3,.06,0xe0d8cc),.2,.6,-.05)}
+ else if(kind=='wolf'){A(box(1,.4,.4,0x585860),0,.7,0);A(box(.35,.3,.3,0x585860),.6,.85,0);A(box(.5,.1,.1,0x585860),-.7,.8,0);L4.forEach(([a,b])=>A(cyl(.05,.5,0x44444c,5),a,.25,b))}
+ else{A(box(1.4,.9,.8,0x5a3a22),0,.9,0);A(box(.5,.5,.5,0x5a3a22),.8,1.2,0);L4.forEach(([a,b])=>A(cyl(.12,.6,0x40281a,6),a*1.2,.3,b*2))}
+ g.position.set(x,gh(I(gx(x),gx(z))),z);scene.add(g);animals.push({g,k:kind,x,z,tx:null,tz:null,t:R()*3,alive:1,rs:0})}
+function stepAnimals(dt){animals.forEach(a=>{if(!a.alive){if(a.rs&&day>=a.rs){a.alive=1;a.g.visible=true;a.rs=0}return}
+ const dp=Math.hypot(px-a.x,pz-a.z),prey=a.k=='deer'||a.k=='rabbit';let sp=.9;
+ if(prey&&dp<4.5&&!inside){a.tx=a.x+(a.x-px)*2;a.tz=a.z+(a.z-pz)*2;sp=a.k=='deer'?5:4}
+ else if(a.k=='wolf'&&night&&dp<22&&!inside){a.tx=px;a.tz=pz;sp=3.2;if(dp<1.5&&!a.bit){a.bit=1;S.coin=Math.max(0,S.coin-5);fl('🐺 −5🪙',px,pz);setTimeout(()=>a.bit=0,8000)}}
+ else{a.t-=dt;if(a.tx==null||a.t<0){a.t=3+R()*4;a.tx=a.x+(R()-.5)*14;a.tz=a.z+(R()-.5)*14}}
+ const dx=a.tx-a.x,dz=a.tz-a.z,d=Math.hypot(dx,dz);if(d>.4){a.x=cl(a.x+dx/d*sp*dt,-HW+3,HW-3);a.z=cl(a.z+dz/d*sp*dt,-HW+3,HW-3);a.g.rotation.y=Math.atan2(-dz,dx)}
+ const ci=I(cl(gx(a.x),0,G-1),cl(gx(a.z),0,G-1));if((type[ci]==1||type[ci]==2)&&d>.4){a.x-=dx/d*sp*dt*2;a.z-=dz/d*sp*dt*2}
+ a.g.position.set(a.x,gh(ci)+Math.abs(Math.sin(gt*8+a.x))*(sp>2?.2:.05),a.z)})}
+function hunt(j){const a=animals[j];if(!a||!a.alive)return;a.alive=0;a.g.visible=false;a.rs=day+3;const g=a.k=='deer'?5:2;S.grain+=g;if(a.k=='deer')S.coin+=3;fl('🏹 +'+g+'🌾',a.x,a.z);fx(a.x,a.z,0xc0392b,8,3)}
+function campfire(x,z){const g=new THREE.Group(),fl2=[];for(let j=0;j<3;j++){const l=cyl(.1,1,0x4a2f18,5);l.rotation.z=1.4;l.rotation.y=j*2.1;g.add(at(l,0,.12,0))}for(let j=0;j<5;j++){const f=cone(.18,.6,j%2?0xff7a00:0xffd23f,5);g.add(at(f,(R()-.5)*.3,.4,(R()-.5)*.3));fl2.push(f)}g.position.set(x,gh(I(gx(x),gx(z))),z);scene.add(g);fires.push({fl:fl2,t:R()*6})}
+// индейцы
+const NTX=cw(14),NTZ=cw(46);
+function tipi(x,z,c){const g=new THREE.Group();g.add(at(cone(1.6,3.2,c,7),0,1.6,0),at(box(.5,1,.05,0x2a1a0e),0,.5,1.2));[0,1,2].forEach(j=>g.add(at(cyl(.03,1.5,0x6b4423,4),(j-1)*.4,3.5,0)));g.position.set(x,gh(I(gx(x),gx(z))),z);scene.add(g)}
+[[-4,-2,0xe8c88a],[3,-3,0xd9a066],[-3,3,0xc87e4a],[4,2,0xe0b878]].forEach(([a,b,c])=>tipi(NTX+a,NTZ+b,c));
+{const g=new THREE.Group();[0xc1121f,0xffd23f,0x3a86ff,0x2fb34a].forEach((c,j)=>{g.add(at(box(.9,.9,.9,c),0,.5+j*.95,0));g.add(at(box(.5,.12,.1,0x111111),0,.6+j*.95,.46))});g.position.set(NTX,gh(I(14,46)),NTZ-5);scene.add(g)}
+campfire(NTX,NTZ);for(let k=0;k<4;k++)mkV('i',NTX+(R()-.5)*8,NTZ+(R()-.5)*8,0xc0793a);lbl('🦅 Племя Орлиного Пера',NTX,NTZ);
+// крепость рыцарей
+const FKX=cw(28),FKZ=cw(46),GATE=new THREE.Group();
+{const g=new THREE.Group(),A=(m,x,y,z)=>{g.add(at(m,x,y,z));return m},W=0x8d8d96;A(box(16,4,1,W),0,2,8);A(box(1,4,16,W),-8,2,0);A(box(1,4,16,W),8,2,0);A(box(6,4,1,W),-5,2,-8);A(box(6,4,1,W),5,2,-8);
+ [[-8,-8],[8,-8],[-8,8],[8,8]].forEach(([x,z])=>{A(cyl(1.5,6,0x7a7a84,8),x,3,z);A(cone(1.8,2,0xc1121f,8),x,7,z);A(box(.1,1.6,1,0xc1121f),x+1.6,5,z)});
+ A(box(4,3,4,0xa8a8b4),0,1.5,2);A(cone(3.2,2,0x9b1c1c,4),0,4,2);for(let j=-3;j<4;j++)GATE.add(at(box(.12,3.4,.12,0x2a2a32),j*.4,1.7,0));GATE.add(at(box(3,.15,.2,0x2a2a32),0,2.2,0),at(box(3,.15,.2,0x2a2a32),0,.9,0));GATE.position.set(0,0,-8);g.add(GATE);
+ g.position.set(FKX,gh(I(28,46)),FKZ);scene.add(g)}
+campfire(FKX+4,FKZ+4);lbl('🛡 Железная Марка',FKX,FKZ);
+[[-2.8,-9],[2.8,-9]].forEach(([a,b])=>{const v=mkV('x',FKX+a,FKZ+b,0x9aa4b0,'g');gateKnights.push(v)});for(let k=0;k<3;k++)mkV('g',FKX+(R()-.5)*8,FKZ+(R()-.5)*8,0x9aa4b0);
+campfire(NX+3,NZ+3);campfire(NCX+2,NCZ+1);campfire(HX+3,HZ+3);
+const PT=[{k:'n',nm:'Ольховая',em:'🏘',o:NB,x:()=>NX,z:()=>NZ,rid:'sun',pr:()=>({g:NB.dry>.3?4:2.5,w:1.8,s:2.2}),tx:'Любят воду и мосты'},{k:'k',nm:'Кочевники',em:'⚔',o:NB2,x:()=>NCX,z:()=>NCZ,rid:'anc',pr:()=>({g:3.2,w:1.4,s:1.6}),tx:'Уважают башни и дары'},{k:'i',nm:'Племя Орлиного Пера',em:'🦅',o:NB3,x:()=>NTX,z:()=>NTZ,rid:'forest',pr:()=>({g:2,w:1.2,s:1.4}),tx:'Духи леса: рубка деревьев сердит их'},{k:'g',nm:'Железная Марка',em:'🛡',o:NB4,x:()=>FKX,z:()=>FKZ-9,rid:'light',pr:()=>({g:2.2,w:2.6,s:3.2}),tx:'Рыцари покупают камень и дерево'}];
+const RLN={sun:'Культ Солнца',forest:'Дух леса',light:'Орден Света',anc:'Культ Предков'};
+function openTrade(k){const P_=PT.find(p=>p.k==k);modal++;const e=$('#ev');let msg='';
+ const calc=()=>{const pr=P_.pr(),f=1+(P_.o.rel>30?.15:0),mr=ideo.cu=='merch'?1.1:1;return{pr,sell:(n,u)=>Math.floor(n*pr[u]*.85*f*mr),buy:(n,u)=>Math.ceil(n*pr[u]*1.25/mr)}};
+ const draw=()=>{const{sell,buy}=calc(),B_=(a,t,dis)=>`<button data-a="${a}" ${dis?'disabled':''}>${t}</button>`,ex=k=='i'?B_('learn','🦅 '+TX('Обмен знаниями')+': 10🌾 → 8📜',S.grain<10)+B_('rit','🔥 '+TX('Ритуал')+': 20🪙 → 8🎭',S.coin<20):k=='g'?B_('hire','🛡 '+TX('Нанять рыцаря')+': 60🪙',S.coin<60):'';
+  e.innerHTML=`<div><h2>${P_.em} ${TX(P_.nm)}</h2><p><b>🌾${fi(S.grain)} · 🌱${fi(S.seed)} · 🪵${fi(S.wood)} · 🪨${fi(S.stone)} · 🪙${fi(S.coin)}</b><br>♥ ${fi(P_.o.rel)} · ✦ ${TX(RLN[P_.rid])}${ideo.rl==P_.rid?' ✔':''}<br><small>${TX(P_.tx)}</small></p>${msg?`<p style="color:#9be37a">${msg}</p>`:''}<div class="tg">`+
+  B_('sg',`${TX('Продать')} 10🌾 → +${sell(10,'g')}🪙`,S.grain<10)+B_('bg',`${TX('Купить')} 10🌾 −${buy(10,'g')}🪙`,S.coin<buy(10,'g'))+B_('sw',`${TX('Продать')} 10🪵 → +${sell(10,'w')}🪙`,S.wood<10)+B_('bd',`${TX('Купить')} 10🌱 −${buy(10,'g')}🪙`,S.coin<buy(10,'g'))+B_('ss',`${TX('Продать')} 10🪨 → +${sell(10,'s')}🪙`,S.stone<10)+B_('bs',`${TX('Купить')} 5🪨 −${buy(5,'s')}🪙`,S.coin<buy(5,'s'))+B_('gift','🎁 '+TX('Подарок')+': 10🌾',S.grain<10)+(P_.o.rel>=30&&!P_.o.tr?B_('pact','🤝 '+TX('Договор')):'')+ex+`</div><button data-a="x">${TX('Закрыть')}</button></div>`};
+ e.style.display='flex';draw();
+ e.onclick=ev=>{const b=ev.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.a,o=P_.o,{sell,buy}=calc();if(a=='x'){e.style.display='none';modal--;ui();return}
+  const sl=(key,u,em)=>{S[key]-=10;const c=sell(10,u);S.coin+=c;o.rel=Math.min(100,o.rel+.4);msg=`✔ ${TX('Продать')} 10${em} → +${c}🪙`},by=(key,n,u,em)=>{const c=buy(n,u);S.coin-=c;S[key]+=n;msg=`✔ ${TX('Купить')} ${n}${em} −${c}🪙`};
+  if(a=='sg')sl('grain','g','🌾');if(a=='sw')sl('wood','w','🪵');if(a=='ss')sl('stone','s','🪨');if(a=='bg')by('grain',10,'g','🌾');if(a=='bd')by('seed',10,'g','🌱');if(a=='bs')by('stone',5,'s','🪨');
+  if(a=='gift'){S.grain-=10;o.rel=Math.min(100,o.rel+10);msg='🎁 +10 ♥'}if(a=='pact'){o.tr=1;msg='🤝 +8🪙/день'}
+  if(a=='learn'){S.grain-=10;S.know+=8;o.rel+=1;msg='🦅 +8📜'}if(a=='rit'){S.coin-=20;S.cult+=8;o.rel+=5;msg='🔥 +8🎭'}
+  if(a=='hire'){S.coin-=60;S.knights++;const v=mkV('g',HX+2,HZ+2,0x9aa4b0);v.camp=[HX,HZ];msg='🛡 +1'}
+  draw()}}
+// трава, цветы, существа
+const GN=30000,GB=new THREE.BufferGeometry();GB.setAttribute('position',new THREE.BufferAttribute(new Float32Array([-.06,0,0,.06,0,0,0,.65,0]),3));GB.setAttribute('normal',new THREE.BufferAttribute(new Float32Array([0,0,1,0,0,1,0,0,1]),3));
+const gU={uT:{value:0}},GM=new THREE.MeshLambertMaterial({side:THREE.DoubleSide});
+GM.onBeforeCompile=sh=>{sh.uniforms.uT=gU.uT;sh.vertexShader='uniform float uT;\n'+sh.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n#ifdef USE_INSTANCING\n transformed.x+=sin(uT*2.0+instanceMatrix[3].x*.6+instanceMatrix[3].z*.4)*.18*position.y;\n transformed.z+=cos(uT*1.7+instanceMatrix[3].z*.5)*.1*position.y;\n#endif')};
+const GRS=new THREE.InstancedMesh(GB,GM,GN),dg=new THREE.Object3D();GRS.frustumCulled=false;GRS.setColorAt(0,cc.setHex(0x44aa33));GRS.instanceColor.needsUpdate=true;GRS.count=0;scene.add(GRS);
+function seedGrass(){lastGrassC=[px,pz];grassDirty=false;for(let k=0;k<GN;k++){const a=R()*6.283,r=36*Math.pow(R(),.7),x=px+Math.cos(a)*r,z=pz+Math.sin(a)*r,cx=gx(x),cz=gx(z);let good=false,i=0,b=0;if(ok(cx,cz)){i=I(cx,cz);b=bio(cx,cz);good=!type[i]&&wear[i]<.3&&b!=6&&(b!=1||R()<.2)&&(b!=2||R()<.12)}
+  if(!good){dg.position.set(0,-9,0);dg.scale.setScalar(.0001);dg.rotation.set(0,0,0)}else{dg.position.set(x,gh(i),z);dg.rotation.set((R()-.5)*.3,R()*6.283,(R()-.5)*.3);dg.scale.set(1,b==1?.5:b==3?1.1:.7+R()*.9,1);cc.setHSL(season==3?.55:season==2?.12:[.27,.12,.56,.4,.3,.4,.05][b],season==3?.1:[.7,.55,.2,.5,.65,.45,.2][b],season==3?.88:.28+R()*.25)}
+  dg.updateMatrix();GRS.setMatrixAt(k,dg.matrix);GRS.setColorAt(k,cc)}GRS.count=GN;GRS.instanceMatrix.needsUpdate=true;GRS.instanceColor.needsUpdate=true}
+function walkWear(x,z,dt){const i=I(cl(gx(x),0,G-1),cl(gx(z),0,G-1));if(type[i])return;const a=wear[i],b=Math.min(1,a+dt*.05);wear[i]=b;if(fi(a*8)!=fi(b*8)){paint(i);im.instanceColor.needsUpdate=true;grassDirty=true}}
+function trail(x0,z0,x1,z1,w){const n=Math.ceil(Math.hypot(x1-x0,z1-z0)/CS*1.5);for(let k=0;k<=n;k++){const q=k/n,x=x0+(x1-x0)*q+Math.sin(q*9+x0)*1.3,z=z0+(z1-z0)*q+Math.cos(q*7+z0)*1.3,i=I(cl(gx(x),0,G-1),cl(gx(z),0,G-1));if(!type[i]){wear[i]=Math.max(wear[i],w);paint(i)}}}
+trail(HX,HZ,NX,NZ,.7);trail(HX,HZ,NCX,NCZ,.65);trail(HX,HZ,HX-9,HZ+2,.8);trail(NX,NZ,NTX,NTZ,.55);trail(NTX,NTZ,FKX,FKZ-9,.6);trail(NX,NZ,FKX,FKZ-9,.5);im.instanceColor.needsUpdate=true;
+{const FS=1500,fh=new THREE.InstancedMesh(new THREE.SphereGeometry(.13,6,5),mt(),FS),fs=new THREE.InstancedMesh(new THREE.CylinderGeometry(.015,.02,.5,4),mt(),FS),pal=[0xff4d6d,0xffd23f,0xffffff,0xb388ff,0xff9e00,0x4dd0e1,0xff7ab8],d=new THREE.Object3D();let n=0;
+ for(let k=0;k<12000&&n<FS;k++){const x=fi(R()*G),z=fi(R()*G),i=I(x,z),b=bio(x,z);if(type[i]||(b!=0&&b!=4&&b!=5&&b!=3))continue;const X=cw(x)+(R()-.5)*2.6,Z=cw(z)+(R()-.5)*2.6,y=gh(i),h=.3+R()*.5;d.rotation.set(0,0,0);d.position.set(X,y+h/2,Z);d.scale.set(1,h/.5,1);d.updateMatrix();fs.setMatrixAt(n,d.matrix);fs.setColorAt(n,cc.setHex(0x4a9a3a));d.position.set(X,y+h+.05,Z);d.scale.setScalar(.8+R()*.6);d.updateMatrix();fh.setMatrixAt(n,d.matrix);fh.setColorAt(n,cc.setHex(b==3?rr([0x7ef9ff,0xb388ff]):rr(pal)));n++}
+ fh.count=fs.count=n;fh.frustumCulled=fs.frustumCulled=false;scene.add(fh,fs)}
+const BFC=new THREE.InstancedMesh(new THREE.PlaneGeometry(.3,.22),new THREE.MeshBasicMaterial({side:THREE.DoubleSide}),50),FFC=new THREE.InstancedMesh(new THREE.SphereGeometry(.07,5,4),new THREE.MeshBasicMaterial({color:0xd8ff5a}),60),BIRD=new THREE.InstancedMesh(new THREE.BoxGeometry(1.4,.05,.35),new THREE.MeshBasicMaterial({color:0x222222}),8);
+for(let k=0;k<50;k++)BFC.setColorAt(k,cc.setHex(rr([0xff7ab8,0xffd23f,0x7ec8ff,0xffffff,0xff9e3d])));for(const m of[BFC,FFC,BIRD]){m.frustumCulled=false;scene.add(m)}
+function critters(t){const dz=new THREE.Object3D();for(let k=0;k<50;k++){const x=px+Math.sin(k*12.9+t*.21)*20,z=pz+Math.cos(k*7.7+t*.17)*20;dz.position.set(x,gh(I(cl(gx(x),0,G-1),cl(gx(z),0,G-1)))+1.1+Math.sin(t*1.7+k)*.5,z);dz.rotation.set(-1.2,0,0);dz.scale.set(1,!night&&!inside?.4+Math.abs(Math.sin(t*14+k))*.9:.001,1);dz.updateMatrix();BFC.setMatrixAt(k,dz.matrix)}
+ for(let k=0;k<60;k++){const x=px+Math.sin(k*5.3+t*.3)*18,z=pz+Math.cos(k*9.1+t*.25)*18;dz.position.set(x,gh(I(cl(gx(x),0,G-1),cl(gx(z),0,G-1)))+.8+Math.sin(t*2+k)*.6,z);dz.rotation.set(0,0,0);dz.scale.setScalar(night&&!inside?1:.001);dz.updateMatrix();FFC.setMatrixAt(k,dz.matrix)}
+ for(let k=0;k<8;k++){const a=t*.15+k*.8,r=60+k*4;dz.position.set(Math.cos(a)*r,30+Math.sin(t+k)*2,Math.sin(a)*r*.7);dz.rotation.set(0,-a,Math.sin(t*6+k)*.5);dz.scale.setScalar(1);dz.updateMatrix();BIRD.setMatrixAt(k,dz.matrix)}
+ BFC.instanceMatrix.needsUpdate=true;BFC.instanceColor.needsUpdate=true;FFC.instanceMatrix.needsUpdate=true;BIRD.instanceMatrix.needsUpdate=true}
+function visuals(dt){const t=performance.now()/1000;gU.uT.value=t;fires.forEach(f=>f.fl.forEach((c,j)=>{c.scale.set(1,.6+Math.abs(Math.sin(t*7+j*1.7+f.t))*.9,1);c.position.y=.3+Math.sin(t*9+j)*.05}));
+ const op=Math.hypot(px-FKX,pz-(FKZ-8))<13&&NB4.rel>=-10&&!inside;GATE.position.y+=((op?3.4:0)-GATE.position.y)*Math.min(1,dt*2);gateKnights.forEach(v=>{const a=v.m.userData.arm;if(a)a.rotation.z=op&&GATE.position.y<3?Math.sin(t*6)*.9-.6:0});critters(t)}
+function simV3(dt){stepAnimals(dt);growing.forEach(g=>{const s=Math.min(1,(gt-g.t0)/(DL*2));g.o.scale.setScalar(Math.max(.15,s))});for(let k=growing.length-1;k>=0;k--)if(gt-growing[k].t0>=DL*2)growing.splice(k,1);
+ const z=bio(cl(gx(px),0,G-1),cl(gx(pz),0,G-1));if(!inside&&z!=lastZone){lastZone=z;say('📍 '+TX(BN[z]))}
+ const ns=performance.now()/1000;if(!inside&&((grassDirty&&ns-lastSeedT>.8)||Math.hypot(px-lastGrassC[0],pz-lastGrassC[1])>9)){seedGrass();lastSeedT=ns}
+ fishT-=dt;if(fishT<0&&wetList.length){fishT=2+R()*4;const i=rr(wetList),x=cw(i%G),z2=cw(fi(i/G));fx(x,z2,0xbfe6ff,7,3,.2);const f=sph(.2,0xc0d8e8);f.scale.set(1.8,.7,.7);scene.add(f);anim(.9,k=>{f.position.set(x+k*1.5,.2+Math.sin(k*Math.PI)*1.3,z2);f.rotation.z=(k-.5)*2;if(k>=1)scene.remove(f)})}}
+// звери по карте
+for(let k=0;k<130&&animals.length<60;k++){const x=fi(R()*G),z=fi(R()*G),i=I(x,z),b=bio(x,z);if(type[i]||res.has(i))continue;const X=cw(x),Z=cw(z);
+ if(animals.filter(a=>a.k=='deer').length<20&&(b==0||b==4||b==5)&&R()<.5)mkAnimal('deer',X,Z);else if(animals.filter(a=>a.k=='rabbit').length<26&&(b==0||b==4)&&R()<.5)mkAnimal('rabbit',X,Z);else if(animals.filter(a=>a.k=='wolf').length<6&&b==5)mkAnimal('wolf',X,Z);else if(animals.filter(a=>a.k=='bear').length<3&&b==5)mkAnimal('bear',X,Z)}
+// вера и культура
+async function chooseFaith(){const rl=await ask('Выберите веру вашего народа','',[['☀ '+TX('Культ Солнца')+': '+TX('Урожай +15%')],['🌲 '+TX('Дух леса')+': '+TX('Дерево +25%, племя лесов вас уважает')],['✦ '+TX('Орден Света')+': '+TX('Знания +20%')],['🕯 '+TX('Культ Предков')+': '+TX('Советники верны дольше, монеты +10%')]]);ideo.rl=['sun','forest','light','anc'][rl];
+ const cu=await ask('Выберите культуру вашего народа','',[['🌾 '+TX('Земледельцы')+': '+TX('Урожай +10%, дома дешевле')],['⚔ '+TX('Воины')+': '+TX('Налёты слабее, башни дешевле')],['🔨 '+TX('Мастера')+': '+TX('Здания дешевле, мануфактура мощнее')],['🪙 '+TX('Купцы')+': '+TX('Рынки +25%, цены выгоднее')]]);ideo.cu=['farm','war','art','merch'][cu]}
+const PROLOGUE="Вы — старейшина маленькой деревни на берегу реки. Вода течёт с севера на юг; ниже по течению живут Ольховая, кочевники, племя и рыцари Железной Марки. Ходите джойстиком, ведите пальцем по земле при выбранном инструменте. Грядки (🌱) нужна вода рядом (💧 канал от реки). Жители сами сеют и жнут, но семена кончаются — торгуйте. При дворе давно шепчутся об измене: входите в здания (🚪), говорите с советниками — и не верьте всему, что слышите.";
+async function newGameFlow(){await intro();await ask('📜 Рассвет цивилизации',PROLOGUE,[['Начать правление']]);await chooseFaith();saveGame();ui()}
+function pauseMenu(){ask('☰ '+A(31),A(30)+': '+(curSave?'💾':''),[['▶ '+A(21)],['💾 '+A(20),()=>{saveGame();setTimeout(()=>location.reload(),50)}]])}
+function bootGame(){GEN=false;const u=ACC();if(INT&&u){const sv=sget(u).find(g=>g.id==INT.id);curSave=sv?{id:sv.id}:null;ST.removeItem('civ_intent');if(INT.mode=='load'&&sv&&!sv.fresh){applySave(sv);started=true;say('💾 '+A(29))}else{started=true;newGameFlow()}}else bootApp()}
+
+// ===== цикл =====
+const clk=new THREE.Clock();let acc=0,rainP=null;
+const rg=new THREE.BufferGeometry();rg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(900),3));rainP=new THREE.Points(rg,new THREE.PointsMaterial({color:0xaad4ff,size:.25}));rainP.visible=false;scene.add(rainP);
+function resize(){ren.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}addEventListener('resize',resize);resize();
+(function loop(){requestAnimationFrame(loop);let dt=Math.min(clk.getDelta(),.05);const real=dt;
+ for(let i=anims.length-1;i>=0;i--){const a=anims[i];a.t+=real;const k=Math.min(a.t/a.d,1);a.f(k);if(k>=1){anims.splice(i,1);a.r()}}
+ if(!modal&&!over&&started){dt*=spd;const od=fi(gt/DL);gt+=dt;if(fi(gt/DL)>od)dayTick();
+  if(drought>0){drought-=dt;if(drought<=0){flow();say('🌦 Засуха закончилась, река вернулась')}}if(rain>0)rain-=dt;
+  const h=hour();night=h>=20||h<5.5;
+  plots.forEach(p=>{const b=bio(p.i%G,fi(p.i/G)),w=near(p.i,tc.irr?3:2)||b==3;p.m=w?Math.min(1,p.m+dt*.15):Math.max(0,p.m-dt*(tc.irr?.012:.03)*(b==1?3:1));
+   if(p.sown){if(p.m>0)p.g=Math.min(1,p.g+dt/(DL*.75)*(rain>0?2:1)*(night?.3:1)*(b==2?.35:1)*[1.2,1,1,.05][season]);else p.g=Math.max(0,p.g-dt*.006);
+    if(p.n&&p.g>=1){p.g=0;boom(p.gr.position.x,p.gr.position.z)}if(p.g<=0&&!p.n&&p.m<=0){p.sown=0;fl('🥀 Росток погиб',p.gr.position.x,p.gr.position.z)}}
+   p.st.forEach(s=>{const y=p.sown?.08+p.g*.9:.01;s.rotation.z=Math.sin(gt*2+s.position.x*3+s.position.z)*.07;if(s.userData.ear)s.userData.ear.visible=p.g>.55;s.scale.y+=(y-s.scale.y)*.1;s.material.color.setRGB(p.m<.15&&p.sown?.5:.35+p.g*.55,p.m<.15&&p.sown?.38:.75-p.g*.2,.2)})});
+  vs.forEach(v=>stepV(v,dt));
+  if(fi(gt*2)!=loop.sm){loop.sm=fi(gt*2);blds.forEach(b=>{if(b.k=='M'&&!b.n){const m=sph(.35,0x999999);m.material.transparent=true;m.position.set(b.g.position.x+.9,b.g.position.y+3.8,b.g.position.z);scene.add(m);anim(3,k=>{m.position.y+=.025;m.material.opacity=1-k;m.scale.setScalar(1+k*2);if(k>=1)scene.remove(m)})}})}
+  if(meetNext&&hour()>=21&&!agent&&anyTr().length)startMeet(rr(anyTr()));
+  if(thief&&!inside&&Math.hypot(px-thief.v.x,pz-thief.v.z)<2.8){const th=thief;thief=null;scene.remove(th.v.m);vs.splice(vs.indexOf(th.v),1);S.coin+=40;th.t.cl+=2;fx(px,pz,0xffd23f,16,5);ask('🏃 Вор пойман!','Он вырывается и молчит, но на его плаще — нашивка в '+th.t.col+' цвете. Кошелёк возвращён.',[['Запомню…']])}
+  if(agent&&agent.n<2&&!inside){const d=Math.hypot(px-agent.v.x,pz-agent.v.z);if(agent.atMeet&&d<9){agent.n=2;eaves(agent)}else if(agent.n==0&&d<6){agent.n=1;agent.t.sus++;ban('👤 Фигура в плаще','Он спешит к реке — плащ '+agent.t.col+' цвета',2400);say('👤 Ночью замечена фигура в '+agent.t.col+' плаще')}}
+  actUI();simV3(dt);
+  for(let i=0;i<G*G;i++){const t=type[i];if(t==1||t==2||t==3){const tg=wet[i]?1:0,d=chT>0?(gt-chT)>(dist[i]<0?0:dist[i])*.9/spd*.5:true;if(tg>wa[i]&&d)wa[i]=Math.min(1,wa[i]+dt*1.6);else if(tg<wa[i])wa[i]=Math.max(0,wa[i]-dt*.7)}}
+  if(fi(gt*4)%2==0)for(let i=0;i<G*G;i++)if(type[i]==1||type[i]==2){paint(i)}im.instanceColor.needsUpdate=true;
+  const sp=(bird?9:5.5)*(inside?.8:smul(I(cl(gx(px),0,G-1),cl(gx(pz),0,G-1))))*dt;let a=jx+(keys.KeyD?1:0)-(keys.KeyA?1:0),b=jz+(keys.KeyS?1:0)-(keys.KeyW?1:0);
+  const LM=inside?6:HW-2;px=cl(px+(Math.cos(yaw)*a+Math.sin(yaw)*b)*sp,-LM,LM);pz=cl(pz+(-Math.sin(yaw)*a+Math.cos(yaw)*b)*sp,-LM,LM);if(!inside&&(Math.abs(a)>.1||Math.abs(b)>.1))walkWear(px,pz,dt)}
+ const ground=inside?300.1:gh(I(cl(gx(px),0,G-1),cl(gx(pz),0,G-1)));av.position.set(px,ground,pz);av.visible=bird&&!inside;
+ if(bird&&!inside){cam.position.set(px+Math.sin(yaw)*22,34,pz+Math.cos(yaw)*22);cam.rotation.set(-1.0,yaw,0)}else{cam.position.set(px,ground+1.7,pz);cam.rotation.set(pitch,yaw,0)}
+ if(cinema){cinema.t+=real;const k=Math.min(cinema.t/cinema.dur,1);if(cinema.f){const q=cinema.f(k);cam.position.set(q[0],q[1],q[2]);cam.lookAt(q[3],q[4],q[5])}else{const a=1+k*1.3,y0=gh(I(cl(gx(cinema.x),0,G-1),cl(gx(cinema.z),0,G-1)));cam.position.set(cinema.x+Math.cos(a)*cinema.rad,y0+cinema.h*(1-.25*k),cinema.z+Math.sin(a)*cinema.rad);cam.lookAt(cinema.x,y0+2,cinema.z)}if(k>=1){const r=cinema.r;cinema=null;r()}}
+ const h=hour(),sh=Math.sin((h-6)*Math.PI/12),lt=cl(sh*1.4+.25,.1,1);hemi.intensity=.3+lt*.75;sun.intensity=Math.max(0,sh)*.9;sun.position.set(Math.cos((h-6)*Math.PI/12)*60+px,Math.max(5,sh*60),30+pz);
+ const sk=new THREE.Color(0x0a1230).lerp(new THREE.Color(rain>0?0x8a9aaa:season==3?0xbcd8ee:season==2?0xf0c88c:0x5fc8ff),lt);scene.background=inside?new THREE.Color(0x1e1610):sk;scene.fog=new THREE.Fog(sk,40,rain>0?90:150);fire.intensity=night?1.6+Math.sin(gt*20)*.3:0;
+ clk.elapsedTime;rainP.visible=rain>0;if(rain>0){const p=rg.attributes.position;for(let i=0;i<300;i++){let y=p.getY(i)-18*real;if(y<0||!p.getX(i)){p.setXYZ(i,px+(R()-.5)*40,y<0||!p.getX(i)?R()*20+8:y,pz+(R()-.5)*40)}else p.setY(i,y)}p.needsUpdate=true}
+ const dN=Math.hypot(px-NX,pz-NZ),dK=Math.hypot(px-NCX,pz-NCZ),pr=NB.dry>.3?4:2.5;trd.style.display='none';
+ if(!inside&&dN<12)setT(`<b>🏘 Ольховая · 🪙 Торговцы</b> · отношения ${fi(NB.rel)} · цена зерна ${pr}🪙${NB.dry>.3?' (голод!)':''}<br><small>Любят воду и мосты</small><br><button data-a="sell">Продать 10🌾</button><button data-a="buy">5🪨 за 18🪙</button><button data-a="gift">🎁 10🌾 в дар</button>${NB.rel>=30&&!NB.tr?'<button data-a="pact">🤝 Договор</button>':''}`);
+ else if(!inside&&dK<12)setT(`<b>⚔ Кочевники · Воины</b> · отношения ${fi(NB2.rel)}<br><small>Уважают башни и щедрые дары</small><br><button data-a="nsell">Продать 10🌾 → 30🪙</button><button data-a="nbribe">🎁 25🪙 в дар</button>${NB2.rel>=25&&!NB2.tr?'<button data-a="ncon">🤝 Союз</button>':''}`);
+ clouds.forEach(c=>{c.position.x+=real*1.5;if(c.position.x>110)c.position.x=-110});cry.rotation.y+=real;cry.position.y=3.5+Math.sin(gt*2)*.3;bl.rotation.z+=real*1.2;
+ if(!crystalDone&&Math.hypot(px-CRX,pz-CRZ)<6){crystalDone=true;cine(CRX,CRZ,9,3.4);S.know+=20;S.cult+=10;ban('💎 Откровение древних','+20📜 +10🎭',2500);say('💎 Вы нашли Кристальные руины!')}
+ if(inside){const tt=performance.now()/1000;npcs.forEach((n,i)=>{n.g.rotation.z=Math.sin(tt*(n.g.userData.tw||1)*1.6+i)*.05;n.g.rotation.y=Math.sin(tt*.6+i)*.25})}
+ waterFrame(clk.elapsedTime,real);visuals(real);lamps.forEach(l=>l.material.emissive.setRGB(night?1:.15,night?.67:.1,night?.2:.03));
+ ren.render(scene,cam)})();
+setInterval(()=>{if(!modal){ui();drawMM()}},500);ui();drawMM();bootGame();setInterval(()=>{if(festival>gt&&!modal)fx(HX+3,HZ+3,rr([0xff4d6d,0xffd23f,0x4dd0e1,0xb388ff]),12,7)},900);say('Ходите джойстиком, осматривайтесь пальцем. 🦅 — вид сверху. Исследуйте ❄ горы, 🏜 пустыню, 🍄 болота, 🌸 рощу и 💎 руины!');
+</script></body></html>
